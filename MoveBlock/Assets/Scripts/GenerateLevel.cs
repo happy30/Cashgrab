@@ -11,12 +11,19 @@ public class GenerateLevel : MonoBehaviour {
     public GameObject Empty;
     public GameObject floor;
     public GameObject wall;
-    public GameObject player;
     public GameObject crate;
-    public GameObject destination;
+    public GameObject target;
 
     public Transform game;
+    public TileManager tileManager;
+    public GameObject player;
 
+
+    void Awake()
+    {
+        player = GameObject.Find("Player");
+        tileManager = Camera.main.GetComponent<TileManager>();
+    }
 	// Use this for initialization
 	void Start ()
     {
@@ -25,7 +32,8 @@ public class GenerateLevel : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update ()
+    {
 	
 	}
 
@@ -38,30 +46,53 @@ public class GenerateLevel : MonoBehaviour {
                 Debug.Log(tex.GetPixel(x, y).r);
                 if (tex.GetPixel(x, y).r == 0)
                 {
-                    Debug.Log("Black");
                     generatedTile = (GameObject)Instantiate(Empty);
                     generatedTile.transform.SetParent(game);
                     generatedTile.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
                     generatedTile.GetComponent<RectTransform>().anchoredPosition = new Vector2((x * 65) + offset, (y * 65) + offset);
+                    generatedTile.GetComponent<TileClass>().pos = (x * 16) + y;
+                    tileManager.tiles.Add(generatedTile);
                 }
-                if (tex.GetPixel(x, y).r >0.7f) 
+                if (tex.GetPixel(x, y).r > 0.5f && tex.GetPixel(x, y).r < 0.8f) 
                 {
                     Debug.Log(tex.GetPixel(x, y).r);
                     generatedTile = (GameObject)Instantiate(wall);
                     generatedTile.transform.SetParent(game);
                     generatedTile.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
                     generatedTile.GetComponent<RectTransform>().anchoredPosition = new Vector2((x * 65) + offset, (y * 65) + offset);
+                    generatedTile.GetComponent<TileClass>().pos = (x * 16) + y;
+                    tileManager.tiles.Add(generatedTile);
                 }
                 if (tex.GetPixel(x, y).r > 0.2f && tex.GetPixel(x, y).r < 0.4f)
                 {
-                    Debug.Log("Black");
                     generatedTile = (GameObject)Instantiate(floor);
                     generatedTile.transform.SetParent(game);
                     generatedTile.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
                     generatedTile.GetComponent<RectTransform>().anchoredPosition = new Vector2((x * 65) + offset, (y * 65) + offset);
+                    generatedTile.GetComponent<TileClass>().pos = (x * 16) + y;
+                    tileManager.tiles.Add(generatedTile);
+                }
+                if (tex.GetPixel(x, y).r == 1)
+                {
+                    generatedTile = (GameObject)Instantiate(target);
+                    generatedTile.transform.SetParent(game);
+                    generatedTile.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
+                    generatedTile.GetComponent<RectTransform>().anchoredPosition = new Vector2((x * 65) + offset, (y * 65) + offset);
+                    generatedTile.GetComponent<TileClass>().pos = (x * 16) + y;
+                    tileManager.tiles.Add(generatedTile);
+                }
+                if (tex.GetPixel(x, y).b == 1)
+                {
+                    generatedTile = (GameObject)Instantiate(crate);
+                    generatedTile.transform.SetParent(game);
+                    generatedTile.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
+                    generatedTile.GetComponent<RectTransform>().anchoredPosition = new Vector2((x * 65) + offset, (y * 65) + offset);
+                    generatedTile.GetComponent<TileClass>().pos = (x * 16) + y;
+                    tileManager.tiles.Add(generatedTile);
                 }
             }
         }
+        player.transform.SetAsLastSibling();
         
     }
 }
