@@ -17,28 +17,29 @@ public class PlayerController : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.RightArrow))
         {
             MoveRight();
-            CheckProgress();
+            
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow))
         {
             MoveLeft();
-            CheckProgress();
+            
         }
         if (Input.GetKeyDown(KeyCode.UpArrow))
         {
             MoveUp();
-            CheckProgress();
+            
         }
         if (Input.GetKeyDown(KeyCode.DownArrow))
         {
             MoveDown();
-            CheckProgress();
+            
         }
     }
 
     public void MoveRight()
     {
-        if(!levelManager.isCompleted)
+        CheckProgress();
+        if (!levelManager.isCompleted)
         {
             if (CheckForCollision(new Vector2(transform.position.x + 1 * 0.64f, transform.position.y), new Vector2(transform.position.x + 2 * 0.64f, transform.position.y)))
             {
@@ -50,7 +51,8 @@ public class PlayerController : MonoBehaviour
 
     public void MoveLeft()
     {
-        if(!levelManager.isCompleted)
+        CheckProgress();
+        if (!levelManager.isCompleted)
         {
             if (CheckForCollision(new Vector2(transform.position.x - 1 * 0.64f, transform.position.y), new Vector2(transform.position.x - 2 * 0.64f, transform.position.y)))
             {
@@ -62,6 +64,7 @@ public class PlayerController : MonoBehaviour
 
     public void MoveUp()
     {
+        CheckProgress();
         if (!levelManager.isCompleted)
         {
             if (CheckForCollision(new Vector2(transform.position.x, transform.position.y + 1 * 0.64f), new Vector2(transform.position.x, transform.position.y + 2 * 0.64f)))
@@ -73,6 +76,7 @@ public class PlayerController : MonoBehaviour
 
     public void MoveDown()
     {
+        CheckProgress();
         if (!levelManager.isCompleted)
         {
             if (CheckForCollision(new Vector2(transform.position.x, transform.position.y - 1 * 0.64f), new Vector2(transform.position.x, transform.position.y - 2 * 0.64f)))
@@ -132,6 +136,7 @@ public class PlayerController : MonoBehaviour
                         tileManager.tiles[i].UpdatePos(pos2);
                         tileManager.tiles[i].onTarget = true;
                         tileManager.tiles[i].GetComponent<SpriteRenderer>().color = Color.blue;
+                        CheckProgress();
                         return true;
                     }
                 }

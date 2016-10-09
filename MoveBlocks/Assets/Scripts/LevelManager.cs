@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class LevelManager : MonoBehaviour
 {
@@ -11,11 +12,13 @@ public class LevelManager : MonoBehaviour
     public GameObject reset;
 
     public bool isCompleted;
+    public Text progressText;
 
 
     void Update()
     {
-        if(progress == levels[currentLevel].targets )
+        progressText.text = progress.ToString();
+        if(progress == levels[currentLevel].targets)
         {
             completed.SetActive(true);
             reset.SetActive(false);
