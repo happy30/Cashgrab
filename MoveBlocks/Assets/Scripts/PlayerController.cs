@@ -6,10 +6,14 @@ public class PlayerController : MonoBehaviour
     public TileManager tileManager;
     public LevelManager levelManager;
 
+    Vector2 dest;
+    public bool canMove;
+
     void Awake()
     {
         levelManager = GameObject.Find("GameManager").GetComponent<LevelManager>();
         tileManager = Camera.main.GetComponent<TileManager>();
+        dest = transform.position;
     }
 
     void Update()
@@ -34,16 +38,26 @@ public class PlayerController : MonoBehaviour
             MoveDown();
             
         }
+
+        transform.position = Vector2.Lerp(transform.position, dest, 20f * Time.deltaTime);
+        if(Vector2.Distance(transform.position, dest) < 0.1f)
+        {
+            transform.position = dest;
+            canMove = true;
+        }
     }
 
     public void MoveRight()
     {
         CheckProgress();
-        if (!levelManager.isCompleted)
+        if (!levelManager.isCompleted && canMove)
         {
             if (CheckForCollision(new Vector2(transform.position.x + 1 * 0.64f, transform.position.y), new Vector2(transform.position.x + 2 * 0.64f, transform.position.y)))
             {
-                transform.position = new Vector2(transform.position.x + 1 * 0.64f, transform.position.y);
+                //transform.position = Vector2.Lerp(transform.position, new Vector2(transform.position.x + 1 * 0.64f, transform.position.y), 3f * Time.deltaTime);
+                //transform.position = new Vector2(transform.position.x + 1 * 0.64f, transform.position.y);
+                dest = new Vector2(transform.position.x + 1 * 0.64f, transform.position.y);
+                canMove = false;
             }
         }
         
@@ -52,11 +66,13 @@ public class PlayerController : MonoBehaviour
     public void MoveLeft()
     {
         CheckProgress();
-        if (!levelManager.isCompleted)
+        if (!levelManager.isCompleted && canMove)
         {
             if (CheckForCollision(new Vector2(transform.position.x - 1 * 0.64f, transform.position.y), new Vector2(transform.position.x - 2 * 0.64f, transform.position.y)))
             {
-                transform.position = new Vector2(transform.position.x - 1 * 0.64f, transform.position.y);
+                //transform.position = new Vector2(transform.position.x - 1 * 0.64f, transform.position.y);
+                dest = new Vector2(transform.position.x - 1 * 0.64f, transform.position.y);
+                canMove = false;
             }
         }
         
@@ -65,11 +81,13 @@ public class PlayerController : MonoBehaviour
     public void MoveUp()
     {
         CheckProgress();
-        if (!levelManager.isCompleted)
+        if (!levelManager.isCompleted && canMove)
         {
             if (CheckForCollision(new Vector2(transform.position.x, transform.position.y + 1 * 0.64f), new Vector2(transform.position.x, transform.position.y + 2 * 0.64f)))
             {
-                transform.position = new Vector2(transform.position.x, transform.position.y + 1 * 0.64f);
+                //transform.position = new Vector2(transform.position.x, transform.position.y + 1 * 0.64f);
+                dest = new Vector2(transform.position.x, transform.position.y + 1 * 0.64f);
+                canMove = false;
             }
         }
     }
@@ -77,11 +95,13 @@ public class PlayerController : MonoBehaviour
     public void MoveDown()
     {
         CheckProgress();
-        if (!levelManager.isCompleted)
+        if (!levelManager.isCompleted && canMove)
         {
             if (CheckForCollision(new Vector2(transform.position.x, transform.position.y - 1 * 0.64f), new Vector2(transform.position.x, transform.position.y - 2 * 0.64f)))
             {
-                transform.position = new Vector2(transform.position.x, transform.position.y - 1 * 0.64f);
+                //transform.position = new Vector2(transform.position.x, transform.position.y - 1 * 0.64f);
+                dest = new Vector2(transform.position.x, transform.position.y - 1 * 0.64f);
+                canMove = false;
             }
         }
     }
