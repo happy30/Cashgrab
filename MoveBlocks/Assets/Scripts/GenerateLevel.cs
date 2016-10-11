@@ -19,12 +19,13 @@ public class GenerateLevel : MonoBehaviour
     {
         levelManager = GameObject.Find("GameManager").GetComponent<LevelManager>();
         tileManager = Camera.main.GetComponent<TileManager>();
+        CreateLevel(levelManager.levels[levelManager.currentLevel].levelTexture);
+        AddCratesAndPlayer(levelManager.levels[levelManager.currentLevel].levelTexture);
     }
 	// Use this for initialization
 	void Start ()
     {
-        CreateLevel(levelManager.levels[levelManager.currentLevel].levelTexture);
-        AddCratesAndPlayer(levelManager.levels[levelManager.currentLevel].levelTexture);
+        
 	}
 	
 	// Update is called once per frame
