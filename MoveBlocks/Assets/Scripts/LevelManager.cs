@@ -17,7 +17,11 @@ public class LevelManager : MonoBehaviour
 
     void Update()
     {
-        progressText.text = progress.ToString();
+        progressText.text = "Level: " + (currentLevel + 1).ToString();
+        if(currentLevel == 4)
+        {
+            progressText.text += " BOSS!!!";
+        }
         if(progress == levels[currentLevel].targets)
         {
             completed.SetActive(true);
@@ -45,10 +49,7 @@ public class LevelManager : MonoBehaviour
 
     public void CompleteLevel()
     {
-        if(currentLevel < 1)
-        {
-            currentLevel++;
-        }
+        currentLevel++;
         ResetLevel();
         completed.SetActive(false);
         isCompleted = false;
