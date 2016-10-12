@@ -9,7 +9,9 @@ public class TileClass : MonoBehaviour
         Floor,
         Target,
         Crate,
-        Player
+        Player,
+        Stairs,
+        Ice
     };
 
     public TileType tileType;

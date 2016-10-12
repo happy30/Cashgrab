@@ -12,25 +12,48 @@ public class LevelManager : MonoBehaviour
     public GameObject reset;
 
     public bool isCompleted;
+    public bool addExit;
     public Text progressText;
+
+    public Transform[] buttons;
+    public GameObject particleObject;
+    public GameObject spawnedParticleObject;
+
+    public TileManager tileManager;
+
+    void Awake()
+    {
+        tileManager = Camera.main.GetComponent<TileManager>();
+    }
 
 
     void Update()
     {
-        progressText.text = "Level: " + (currentLevel + 1).ToString();
-        if(currentLevel == 4)
-        {
-            progressText.text += " BOSS!!!";
-        }
+        progressText.text = (currentLevel + 1).ToString();
         if(progress == levels[currentLevel].targets)
         {
-            completed.SetActive(true);
-            reset.SetActive(false);
-            isCompleted = true;
+            //completed.SetActive(true);
+            //reset.SetActive(false);
+            //isCompleted = true;
+            addExit = true;
+            for (int i = 0; i < tileManager.tiles.Count; i++)
+            {
+                if (tileManager.tiles[i].tileType == TileClass.TileType.Stairs)
+                {
+                    tileManager.tiles[i].gameObject.SetActive(true);
+                }
+            }
         }
         else
         {
             reset.SetActive(true);
+            addExit = false;
+        }
+
+        if(isCompleted)
+        {
+            completed.SetActive(true);
+            reset.SetActive(false);
         }
     }
 
@@ -58,23 +81,29 @@ public class LevelManager : MonoBehaviour
 
     public void Move(int dir)
     {
+        spawnedParticleObject = Instantiate(particleObject, buttons[dir].position, Quaternion.identity) as GameObject;
+        Destroy(spawnedParticleObject, 2);
         PlayerController player = GameObject.Find("Player(Clone)").GetComponent<PlayerController>();
-        if(dir == 0)
+        if(!player.isSliding)
         {
-            player.MoveUp();
+            if (dir == 0)
+            {
+                player.MoveUp();
+            }
+            if (dir == 1)
+            {
+                player.MoveRight();
+            }
+            if (dir == 2)
+            {
+                player.MoveDown();
+            }
+            if (dir == 3)
+            {
+                player.MoveLeft();
+            }
         }
-        if(dir == 1)
-        {
-            player.MoveRight();
-        }
-        if(dir==2)
-        {
-            player.MoveDown();
-        }
-        if(dir==3)
-        {
-            player.MoveLeft();
-        }
+        
     }
 
 	

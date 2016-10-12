@@ -7,6 +7,8 @@ public class GenerateLevel : MonoBehaviour
     public GameObject wall;
     public GameObject floor;
     public GameObject target;
+    public GameObject stairs;
+    public GameObject ice;
 
     public GameObject player;
     public GameObject crate;
@@ -49,13 +51,17 @@ public class GenerateLevel : MonoBehaviour
                 {
                     spawnedTile = (GameObject)Instantiate(wall, new Vector3(x * 0.64f, y * 0.64f, 0), Quaternion.identity);
                 }
-                else if (level.GetPixel(x, y).r > 0.6f && level.GetPixel(x, y).r < 0.7f)
+                else if (level.GetPixel(x, y).r > 0.6f && level.GetPixel(x, y).r < 0.7f && level.GetPixel(x, y).g == 0)
                 {
                     spawnedTile = (GameObject)Instantiate(floor, new Vector3(x * 0.64f, y * 0.64f, 0), Quaternion.identity);
                 }
                 else if (level.GetPixel(x, y).r == 1)
                 {
                     spawnedTile = (GameObject)Instantiate(target, new Vector3(x * 0.64f, y * 0.64f, 0), Quaternion.identity);
+                }
+                else if (level.GetPixel(x, y).g > 0.3f && level.GetPixel(x, y).g < 0.7f)
+                {
+                    spawnedTile = (GameObject)Instantiate(ice, new Vector3(x * 0.64f, y * 0.64f, 0), Quaternion.identity);
                 }
                 if (spawnedTile != null)
                 {
@@ -79,6 +85,11 @@ public class GenerateLevel : MonoBehaviour
                 else if (level.GetPixel(x, y).b == 1)
                 {
                     spawnedTile = (GameObject)Instantiate(crate, new Vector3(x * 0.64f, y * 0.64f, 0), Quaternion.identity);
+                }
+                else if (level.GetPixel(x, y).g == 1)
+                {
+                    spawnedTile = (GameObject)Instantiate(stairs, new Vector3(x * 0.64f, y * 0.64f, 0), Quaternion.identity);
+                    spawnedTile.SetActive(false);
                 }
                 if (spawnedTile != null)
                 {
