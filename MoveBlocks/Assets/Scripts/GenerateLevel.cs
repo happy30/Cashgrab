@@ -16,19 +16,22 @@ public class GenerateLevel : MonoBehaviour
     GameObject spawnedTile;
     public TileManager tileManager;
     public LevelManager levelManager;
+    public StatsManager stats;
 
     void Awake()
     {
         levelManager = GameObject.Find("GameManager").GetComponent<LevelManager>();
         tileManager = Camera.main.GetComponent<TileManager>();
+        levelManager.currentLevel = GameObject.Find("Stats").GetComponent<StatsManager>().levelToLoad;
         CreateLevel(levelManager.levels[levelManager.currentLevel].levelTexture);
         AddCratesAndPlayer(levelManager.levels[levelManager.currentLevel].levelTexture);
+        stats = GameObject.Find("Stats").GetComponent<StatsManager>();
     }
 	// Use this for initialization
 	void Start ()
     {
         
-	}
+    }
 	
 	// Update is called once per frame
 	void Update ()
@@ -51,7 +54,7 @@ public class GenerateLevel : MonoBehaviour
                 {
                     spawnedTile = (GameObject)Instantiate(wall, new Vector3(x * 0.64f, y * 0.64f, 0), Quaternion.identity);
                 }
-                else if (level.GetPixel(x, y).r > 0.6f && level.GetPixel(x, y).r < 0.7f && level.GetPixel(x, y).g == 0)
+                else if (level.GetPixel(x, y).r > 0.6f && level.GetPixel(x, y).r < 0.7f && level.GetPixel(x, y).g == 0 || level.GetPixel(x, y).r > 0.6f && level.GetPixel(x, y).r < 0.7f && level.GetPixel(x, y).g == 1)
                 {
                     spawnedTile = (GameObject)Instantiate(floor, new Vector3(x * 0.64f, y * 0.64f, 0), Quaternion.identity);
                 }

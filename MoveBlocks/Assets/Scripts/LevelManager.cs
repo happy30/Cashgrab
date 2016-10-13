@@ -19,13 +19,20 @@ public class LevelManager : MonoBehaviour
     public GameObject particleObject;
     public GameObject spawnedParticleObject;
 
+    public StatsManager stats;
+
     public TileManager tileManager;
 
     void Awake()
     {
         tileManager = Camera.main.GetComponent<TileManager>();
+        stats = GameObject.Find("Stats").GetComponent<StatsManager>();
     }
 
+    void Start()
+    {
+        
+    }
 
     void Update()
     {
@@ -72,6 +79,7 @@ public class LevelManager : MonoBehaviour
 
     public void CompleteLevel()
     {
+        stats.ClearLevel(currentLevel);
         currentLevel++;
         ResetLevel();
         completed.SetActive(false);
