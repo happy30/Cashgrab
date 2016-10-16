@@ -170,7 +170,7 @@ public class PlayerController : MonoBehaviour
             {
                 for(int n = 0; n < tileManager.tiles.Count; n++)
                 {
-                    if (tileManager.tiles[n].loc == pos2 && tileManager.tiles[n].tileType == TileClass.TileType.Crate || tileManager.tiles[n].loc == pos2 && tileManager.tiles[n].tileType == TileClass.TileType.Wall)
+                    if (tileManager.tiles[n].loc == pos2 && tileManager.tiles[n].tileType == TileClass.TileType.Crate || tileManager.tiles[n].loc == pos2 && tileManager.tiles[n].tileType == TileClass.TileType.Wall || tileManager.tiles[n].loc == pos && tileManager.tiles[n].tileType == TileClass.TileType.Target && levelManager.addExit)
                     {
                         Debug.Log("We cant move the crate");
                         isSliding = false;
@@ -217,17 +217,26 @@ public class PlayerController : MonoBehaviour
                                 return false;
                             }
                         }
+                        for (int h = 0; h < tileManager.tiles.Count; h++)
+                        {
+                            if (tileManager.tiles[h].loc == pos2 && tileManager.tiles[h].tileType == TileClass.TileType.Target && !levelManager.addExit)
+                            {
+                                Debug.Log("We moved a crate ON A TARGET");
+                                tileManager.tiles[g].UpdatePos(pos2);
+                                tileManager.tiles[g].onTarget = true;
+                                tileManager.tiles[g].GetComponent<SpriteRenderer>().color = Color.blue;
+                                CheckProgress();
+                                return true;
+                            }
+                        }
                         Debug.Log("move crate on ice");
                         tileManager.tiles[g].UpdatePos(pos2);
                         tileManager.tiles[g].onTarget = false;
                         tileManager.tiles[g].GetComponent<SpriteRenderer>().color = Color.white;
                         return true;
                     }
-                    else
-                    {
-
-                    }
                 }
+                Debug.Log("Sliding!");
                 isSliding = true;
                 return true;
             }
@@ -237,11 +246,33 @@ public class PlayerController : MonoBehaviour
                 {
                     if (tileManager.tiles[n].loc == pos2 && tileManager.tiles[n].tileType == TileClass.TileType.Floor)
                     {
+                        for (int k = 0; k < tileManager.tiles.Count; k++)
+                        {
+                            if (tileManager.tiles[k].loc == pos && tileManager.tiles[k].tileType == TileClass.TileType.Crate && !levelManager.addExit)
+                            {
+                                Debug.Log("We moved a crate ON A TARGET ripkip");
+                                tileManager.tiles[k].UpdatePos(pos2);
+
+                                for(int d = 0; d < tileManager.tiles.Count; d++)
+                                {
+                                    if(tileManager.tiles[d].loc == pos2 && tileManager.tiles[d].tileType == TileClass.TileType.Target)
+                                    {
+                                        Debug.Log("blue ice");
+                                        tileManager.tiles[k].onTarget = true;
+                                        tileManager.tiles[k].GetComponent<SpriteRenderer>().color = Color.blue;
+                                        return true;
+                                    }
+                                }
+                                CheckProgress();
+                                return false;
+                            }
+                        }
                         Debug.Log("ufucked");
                         isSliding = false;
-                        return false;
+                        return true;
                     }
                 }
+                isSliding = false;
             }
         }
         return true;
