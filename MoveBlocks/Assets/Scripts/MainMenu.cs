@@ -33,13 +33,18 @@ public class MainMenu : MonoBehaviour
     public bool coopSelect;
 
     public bool fading;
+    public bool mainMenu;
 
 
     public void Start()
     {
         stats = GameObject.Find("Stats").GetComponent<StatsManager>();
         _sound = GetComponent<AudioSource>();
-        SelectGender(stats.male);
+        if(mainMenu)
+        {
+            SelectGender(stats.male);
+        }
+        
     }
 
     void Update()
@@ -236,5 +241,15 @@ public class MainMenu : MonoBehaviour
     {
         _sound.PlayOneShot(button);
         surePanel.SetActive(false);
+    }
+
+    public void ToMainMenu()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    public void ToStorySelect()
+    {
+        SceneManager.LoadScene(3);
     }
 }

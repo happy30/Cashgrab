@@ -60,6 +60,12 @@ public class UIManager : MonoBehaviour
         SceneManager.LoadScene(0);
     }
 
+    public void StoryMenu()
+    {
+        levelManager._sound.PlayOneShot(levelManager.button);
+        SceneManager.LoadScene(3);
+    }
+
     public void DragPanel(bool secondPlayer)
     {
         Debug.Log("Dragging...");

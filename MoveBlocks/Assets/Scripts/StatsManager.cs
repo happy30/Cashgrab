@@ -13,6 +13,7 @@ public class StatsManager : MonoBehaviour {
     public bool[] clearedLevelsCoop;
 
     public int levelToLoad;
+    public int keys;
 
     public static StatsManager Instance;
     public bool male;
@@ -50,8 +51,12 @@ public class StatsManager : MonoBehaviour {
     {
         if(!coop)
         {
-            clearedLevels[lv] = true;
-
+            if(!clearedLevels[lv])
+            {
+                clearedLevels[lv] = true;
+                keys++;
+            }
+            
             int u = 0;
             for (int i = 0; i < clearedLevels.Length; i++)
             {
