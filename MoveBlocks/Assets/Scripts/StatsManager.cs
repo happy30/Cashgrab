@@ -19,8 +19,11 @@ public class StatsManager : MonoBehaviour {
     public bool male;
     public int unlockedDoors;
 
+    public Vector2 playerPos;
+
     void Awake()
     {
+        playerPos = new Vector2(-342, 1105);
         male = true;
         if (Instance)
         {
@@ -39,6 +42,9 @@ public class StatsManager : MonoBehaviour {
         {
             unlockedLevels = PlayerPrefsX.GetBoolArray("UnlockedLevels");
             clearedLevels = PlayerPrefsX.GetBoolArray("ClearedLevels");
+            playerPos = PlayerPrefsX.GetVector2("PlayerPos", playerPos);
+            unlockedDoors = PlayerPrefs.GetInt("UnlockedDoors");
+            keys = PlayerPrefs.GetInt("Keys");
         } 
         if(PlayerPrefsX.GetBoolArray("UnlockedLevelsCoop").Length > 1)
         {
@@ -56,6 +62,7 @@ public class StatsManager : MonoBehaviour {
             {
                 clearedLevels[lv] = true;
                 keys++;
+                PlayerPrefs.SetInt("Keys", keys);
             }
             
             int u = 0;
@@ -128,9 +135,16 @@ public class StatsManager : MonoBehaviour {
             clearedLevels[i] = false;
         }
 
+        keys = 0;
+        unlockedDoors = 0;
+        playerPos = new Vector2(-342, 1105);
+
         PlayerPrefsX.SetBoolArray("UnlockedLevels", unlockedLevels);
         PlayerPrefsX.SetBoolArray("ClearedLevels", clearedLevels);
         PlayerPrefsX.SetBoolArray("UnlockedLevelsCoop", unlockedLevelsCoop);
         PlayerPrefsX.SetBoolArray("ClearedLevelsCoop", clearedLevelsCoop);
+        PlayerPrefs.SetInt("Keys", keys);
+        PlayerPrefs.SetInt("UnlockedDoors", 0);
+        PlayerPrefsX.SetVector2("PlayerPos", new Vector2(-342, 1105));
     }
 }

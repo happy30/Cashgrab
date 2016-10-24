@@ -31,8 +31,21 @@ public class StorySelectManager : MonoBehaviour
     void Awake()
     {
         stats = GameObject.Find("Stats").GetComponent<StatsManager>();
-        overlayYDest = -360 - (stats.unlockedDoors * 80);
+        overlayYDest = -360 - (stats.unlockedDoors * 280);
         overlay.anchoredPosition = new Vector2(overlay.anchoredPosition.x, overlayYDest);
+
+        if (stats.unlockedDoors % 2 == 1)
+        {
+            moveRight = true;
+        }
+
+        for(int i = 0; i < stats.unlockedDoors; i++)
+        {
+            Destroy(lockedDoors[i]);
+        }
+
+        player.anchoredPosition = stats.playerPos;
+        doorSpeech.GetComponent<RectTransform>().anchoredPosition = new Vector2(lockedDoors[stats.unlockedDoors].GetComponent<RectTransform>().anchoredPosition.x + 120, lockedDoors[stats.unlockedDoors].GetComponent<RectTransform>().anchoredPosition.y + 120);
     }
 
 
@@ -69,6 +82,8 @@ public class StorySelectManager : MonoBehaviour
                     }
                     else
                     {
+                        stats.playerPos = player.anchoredPosition;
+                        PlayerPrefsX.SetVector2("PlayerPos", player.anchoredPosition);
                         inCutscene = false;
                     }
                 }
@@ -88,6 +103,8 @@ public class StorySelectManager : MonoBehaviour
                     }
                     else
                     {
+                        stats.playerPos = player.anchoredPosition;
+                        PlayerPrefsX.SetVector2("PlayerPos", player.anchoredPosition);
                         inCutscene = false;
                     }
                 }
@@ -121,6 +138,7 @@ public class StorySelectManager : MonoBehaviour
             {
                 moveRight = false;
             }
+            PlayerPrefs.SetInt("UnlockedDoors", stats.unlockedDoors);
         }
     }
 
