@@ -17,6 +17,7 @@ public class StatsManager : MonoBehaviour {
 
     public static StatsManager Instance;
     public bool male;
+    public int unlockedDoors;
 
     void Awake()
     {
