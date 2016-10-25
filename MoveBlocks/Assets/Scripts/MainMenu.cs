@@ -106,7 +106,7 @@ public class MainMenu : MonoBehaviour
                 }
                 if (yRow > 9)
                 {
-                    yPos -= 300;
+                    yPos -= 400;
                     yRow = 0;
                 }
                 buttons.Add(spawnedButton);
@@ -245,11 +245,13 @@ public class MainMenu : MonoBehaviour
 
     public void ToMainMenu()
     {
+        _sound.PlayOneShot(button);
         SceneManager.LoadScene(0);
     }
 
     public void ToStorySelect()
     {
+        _sound.PlayOneShot(button);
         SceneManager.LoadScene(3);
     }
 }

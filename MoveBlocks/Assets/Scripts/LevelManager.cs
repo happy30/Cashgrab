@@ -1,12 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using System.Collections.Generic;
 
 public class LevelManager : MonoBehaviour
 {
     public LevelClass[] levels;
     public int currentLevel;
     public int progress;
+    public int marbleProgress;
 
     public GameObject completed;
     public GameObject reset;
@@ -14,6 +16,13 @@ public class LevelManager : MonoBehaviour
     public bool isCompleted;
     public bool addExit;
     public Text progressText;
+    public Text keysText;
+
+    public GameObject extraKey;
+
+    public GameObject keySprite;
+    public GameObject keyParticle;
+    GameObject spawnedKeyParticle;
 
     public Transform[] buttons;
     public GameObject particleObject;
@@ -48,9 +57,12 @@ public class LevelManager : MonoBehaviour
     public AudioClip openMenu;
     public AudioClip closeMenu;
 
+    public List<GameObject> UIMarbles = new List<GameObject>();
+
     public int playersOnExit;
 
     public bool coop;
+    public bool marblesSpawned;
 
     public bool fading;
     public AudioSource fastSound;
@@ -63,6 +75,7 @@ public class LevelManager : MonoBehaviour
         stats = GameObject.Find("Stats").GetComponent<StatsManager>();
         _sound = GetComponent<AudioSource>();
         sprites = GetComponent<SpriteLayerController>();
+        keysText.text = ": " + stats.keys;
     }
 
     void Update()
@@ -71,7 +84,7 @@ public class LevelManager : MonoBehaviour
         int level = currentLevel - ((block - 1) * 10) + 1;
 
         progressText.text = (block + "." + level);
-        if(progress == levels[currentLevel].targets)
+        if(progress >= levels[currentLevel].targets && marbleProgress == levels[currentLevel].marbles)
         {
             //completed.SetActive(true);
             //reset.SetActive(false);
@@ -91,17 +104,28 @@ public class LevelManager : MonoBehaviour
                 }
             }
         }
+        else if (progress == levels[currentLevel].targets && !marblesSpawned)
+        {
+            Camera.main.GetComponent<GenerateLevel>().CreateSecondaryLayer(levels[currentLevel].secondaryLevelTexture);
+            marblesSpawned = true;
+        }
+
         else
         {
             reset.SetActive(true);
             addExit = false;
         }
 
-        if(isCompleted)
+        if (isCompleted)
         {
             fading = true;
             completed.SetActive(true);
             reset.SetActive(false);
+
+            if (!stats.clearedLevels[currentLevel] && !coop)
+            {
+                extraKey.SetActive(true);
+            }
         }
 
         //Player 1
@@ -182,6 +206,8 @@ public class LevelManager : MonoBehaviour
 
     public void ResetLevel()
     {
+        marblesSpawned = false;
+        marbleProgress = 0;
         progress = 0;
         fastSound.volume = 0;
         fading = false;
@@ -193,8 +219,10 @@ public class LevelManager : MonoBehaviour
         }
 
         Camera.main.GetComponent<TileManager>().tiles.Clear();
+        Camera.main.GetComponent<TileManager>().tiles2.Clear();
         Camera.main.GetComponent<GenerateLevel>().CreateLevel(levels[currentLevel].levelTexture);
         Camera.main.GetComponent<GenerateLevel>().AddCratesAndPlayer(levels[currentLevel].levelTexture);
+        Camera.main.GetComponent<GenerateLevel>().SetMarbles(levels[currentLevel]);
         sprites.AssignPlayers();
         reset.SetActive(true);
     }
@@ -204,7 +232,16 @@ public class LevelManager : MonoBehaviour
         if(!coop)
         {
             playerExitOpenSound = false;
-            stats.ClearLevel(currentLevel, false);
+
+            if(!stats.clearedLevels[currentLevel])
+            {
+                stats.ClearLevel(currentLevel, false);
+                Destroy(spawnedKeyParticle = (GameObject)Instantiate(keyParticle, keySprite.transform.position, Quaternion.identity), 2f);
+                spawnedKeyParticle.transform.SetParent(keySprite.transform);
+                spawnedKeyParticle.transform.localScale = new Vector3(1, 1, 1);
+                keysText.text = ": " + stats.keys;
+            }
+            extraKey.SetActive(false);
             currentLevel++;
             if (currentLevel > 29)
             {

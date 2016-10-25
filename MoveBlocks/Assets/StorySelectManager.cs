@@ -11,6 +11,8 @@ public class StorySelectManager : MonoBehaviour
 
     public float moveSpeed;
 
+    public GameObject sweetPanel;
+
     public RectTransform player;
 
     public Text totalKeys;
@@ -28,11 +30,25 @@ public class StorySelectManager : MonoBehaviour
     public GameObject menuButton;
     public GameObject playButton;
 
+    public AudioClip unlock;
+    public AudioClip button;
+    public AudioClip back;
+    public AudioClip block;
+
+    public AudioClip bgm;
+    public AudioClip walkbgm;
+
+    public AudioSource bgmsound;
+
+    AudioSource _sound;
+
     void Awake()
     {
         stats = GameObject.Find("Stats").GetComponent<StatsManager>();
         overlayYDest = -360 - (stats.unlockedDoors * 280);
         overlay.anchoredPosition = new Vector2(overlay.anchoredPosition.x, overlayYDest);
+        bgmsound.clip = bgm;
+        _sound = GetComponent<AudioSource>();
 
         if (stats.unlockedDoors % 2 == 1)
         {
@@ -64,6 +80,11 @@ public class StorySelectManager : MonoBehaviour
             menuButton.SetActive(false);
             playButton.SetActive(false);
             doorSpeech.SetActive(false);
+            if(bgmsound.clip != walkbgm)
+            {
+                bgmsound.clip = walkbgm;
+                bgmsound.Play();
+            }
 
             if(moveRight)
             {
@@ -84,7 +105,7 @@ public class StorySelectManager : MonoBehaviour
                     {
                         stats.playerPos = player.anchoredPosition;
                         PlayerPrefsX.SetVector2("PlayerPos", player.anchoredPosition);
-                        inCutscene = false;
+                        sweetPanel.SetActive(true);
                     }
                 }
             }
@@ -105,7 +126,7 @@ public class StorySelectManager : MonoBehaviour
                     {
                         stats.playerPos = player.anchoredPosition;
                         PlayerPrefsX.SetVector2("PlayerPos", player.anchoredPosition);
-                        inCutscene = false;
+                        sweetPanel.SetActive(true);
                     }
                 }
             }
@@ -124,6 +145,7 @@ public class StorySelectManager : MonoBehaviour
     {
         if(stats.keys >= keysNeeded[stats.unlockedDoors] && !inCutscene)
         {
+            _sound.PlayOneShot(unlock);
             Destroy(lockedDoors[stats.unlockedDoors]);
             stats.unlockedDoors++;
             overlayYDest -= 280;
@@ -139,6 +161,34 @@ public class StorySelectManager : MonoBehaviour
                 moveRight = false;
             }
             PlayerPrefs.SetInt("UnlockedDoors", stats.unlockedDoors);
+
+            for(int i = 0; i < stats.unlockedLevels.Length; i++)
+            {
+                if(!stats.unlockedLevels[i])
+                {
+                    for(int x = 0; x < 10; x++)
+                    {
+                        stats.unlockedLevels[i + x] = true;
+                    }
+                    break;
+                }
+            }
+        }
+        else
+        {
+            _sound.PlayOneShot(block);
+        }
+    }
+
+    public void SweetButton()
+    {
+        sweetPanel.SetActive(false);
+        inCutscene = false;
+        _sound.PlayOneShot(button);
+        if (bgmsound.clip != bgm)
+        {
+            bgmsound.clip = bgm;
+            bgmsound.Play();
         }
     }
 

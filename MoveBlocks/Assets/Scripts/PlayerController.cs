@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -193,6 +195,20 @@ public class PlayerController : MonoBehaviour
 
     bool CheckForCollision(Vector2 pos, Vector2 pos2)
     {
+        for(int i = 0; i < tileManager.tiles2.Count; i ++)
+        {
+            if(tileManager.tiles2[i].loc == pos && tileManager.tiles2[i].tileType == TileClass.TileType.Marble)
+            {
+                if(!tileManager.tiles2[i].collected)
+                {
+                    levelManager.UIMarbles[levelManager.marbleProgress].GetComponent<Image>().color = Color.white;
+                    levelManager.marbleProgress++;
+                    levelManager._sound.PlayOneShot(levelManager.onTarget, 1f);
+                    tileManager.tiles2[i].Collect();
+                }
+            }
+        }
+
         for(int i = 0; i < tileManager.tiles.Count; i++)
         {
             if(tileManager.tiles[i].loc == pos && tileManager.tiles[i].tileType == TileClass.TileType.Wall)
@@ -267,7 +283,6 @@ public class PlayerController : MonoBehaviour
                             levelManager._sound.PlayOneShot(levelManager.push);
                             return true;
                         }
-                        
                     }
                 }
             }
@@ -395,7 +410,6 @@ public class PlayerController : MonoBehaviour
                                     CheckProgress();
                                     return false;
                                 }
-                                
                             }
                         }
                         Debug.Log("ufucked");
@@ -435,7 +449,6 @@ public class PlayerController : MonoBehaviour
                                         }
                                     }
                                 }
-                                
                             }
                         }
                         levelManager._sound.PlayOneShot(levelManager.move);
@@ -448,5 +461,4 @@ public class PlayerController : MonoBehaviour
         levelManager._sound.PlayOneShot(levelManager.move);
         return true;
     }
-	
 }

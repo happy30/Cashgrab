@@ -10,11 +10,16 @@ public class GenerateLevel : MonoBehaviour
     public GameObject stairs;
     public GameObject ice;
     public GameObject fakeCrate;
+    public GameObject marble;
 
     public GameObject player;
     public GameObject player2;
     public GameObject crate;
     public bool spawnFemale;
+
+    public Transform marblePlace;
+    public GameObject uiMarble;
+    GameObject spawnedUIMarble;
 
     GameObject spawnedTile;
     public TileManager tileManager;
@@ -37,6 +42,7 @@ public class GenerateLevel : MonoBehaviour
         levelManager.currentLevel = GameObject.Find("Stats").GetComponent<StatsManager>().levelToLoad;
         CreateLevel(levelManager.levels[levelManager.currentLevel].levelTexture);
         AddCratesAndPlayer(levelManager.levels[levelManager.currentLevel].levelTexture);
+        SetMarbles(levelManager.levels[levelManager.currentLevel]);
         levelManager.playersOnExit = 0;
         sprites.AssignPlayers();
     }
@@ -136,6 +142,42 @@ public class GenerateLevel : MonoBehaviour
                 {
                     spawnedTile.GetComponent<TileClass>().loc = spawnedTile.transform.position;
                     tileManager.tiles.Add(spawnedTile.GetComponent<TileClass>());
+                }
+                spawnedTile = null;
+            }
+        }
+
+    }
+
+    public void SetMarbles(LevelClass level)
+    {
+        if(level.marbles > 0)
+        {
+            for(int i = 0; i < level.marbles; i++)
+            {
+                spawnedUIMarble = (GameObject)Instantiate(uiMarble);
+                spawnedUIMarble.transform.SetParent(marblePlace);
+                spawnedUIMarble.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
+                spawnedUIMarble.GetComponent<RectTransform>().anchoredPosition = new Vector2(i * 64, 0);
+                levelManager.UIMarbles.Add(spawnedUIMarble);
+            }
+        }
+    }
+
+    public void CreateSecondaryLayer(Texture2D layer)
+    {
+        for (int x = 0; x < 16; x++)
+        {
+            for (int y = 0; y < 16; y++)
+            {
+                if (layer.GetPixel(x, y).b == 1)
+                {
+                    spawnedTile = (GameObject)Instantiate(marble, new Vector3(x * 0.64f, y * 0.64f, 0), Quaternion.identity);
+                }
+                if (spawnedTile != null)
+                {
+                    spawnedTile.GetComponent<TileClass>().loc = new Vector2(x * 0.64f, y * 0.64f);
+                    tileManager.tiles2.Add(spawnedTile.GetComponent<TileClass>());
                 }
                 spawnedTile = null;
             }

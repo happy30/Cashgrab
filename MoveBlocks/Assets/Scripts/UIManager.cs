@@ -11,6 +11,8 @@ public class UIManager : MonoBehaviour
     public GameObject settingsPanel;
     public LevelManager levelManager;
 
+    public Text keysText;
+
     public Vector2 padStart1;
     public Vector2 padStart2;
 

@@ -12,12 +12,14 @@ public class TileClass : MonoBehaviour
         Player,
         Stairs,
         Ice,
+        Marble
     };
 
     public TileType tileType;
     public Vector2 loc;
     public bool onTarget;
     public bool fake;
+    public bool collected;
 
     public void UpdatePos(Vector2 position)
     {
@@ -49,5 +51,11 @@ public class TileClass : MonoBehaviour
             loc = new Vector2(Mathf.Round(position.x * 100) / 100, Mathf.Round(position.y * 100) / 100);
             
         }
+    }
+
+    public void Collect()
+    {
+        GetComponent<SpriteRenderer>().sprite = null;
+        collected = true;
     }
 }

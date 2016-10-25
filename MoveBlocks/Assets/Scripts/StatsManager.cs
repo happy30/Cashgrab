@@ -38,6 +38,7 @@ public class StatsManager : MonoBehaviour {
 
     void Start()
     {
+        /*
         if(PlayerPrefsX.GetBoolArray("UnlockedLevels").Length > 1)
         {
             unlockedLevels = PlayerPrefsX.GetBoolArray("UnlockedLevels");
@@ -51,6 +52,7 @@ public class StatsManager : MonoBehaviour {
             unlockedLevelsCoop = PlayerPrefsX.GetBoolArray("UnlockedLevelsCoop");
             clearedLevelsCoop = PlayerPrefsX.GetBoolArray("ClearedLevelsCoop");
         }
+        */
     }
 
 	
@@ -73,15 +75,6 @@ public class StatsManager : MonoBehaviour {
                     u++;
                 }
             }
-            Debug.Log(u);
-            Debug.Log(unlockedLevels.Length);
-            if ((u + 4) < 30)
-            {
-                Debug.Log("cannothapen");
-                unlockedLevels[u + 4] = true;
-            }
-
-            PlayerPrefsX.SetBoolArray("UnlockedLevels", unlockedLevels);
             PlayerPrefsX.SetBoolArray("ClearedLevels", clearedLevels);
         }
         else
@@ -114,7 +107,11 @@ public class StatsManager : MonoBehaviour {
     {
         for(int i = 0; i < unlockedLevels.Length; i ++)
         {
-            if (i > 4)
+            if(i < 10)
+            {
+                unlockedLevels[i] = true;
+            }
+            if (i > 9)
             {
                 unlockedLevels[i] = false;
             }   
