@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 
 public class LevelManager : MonoBehaviour
 {
@@ -17,6 +18,7 @@ public class LevelManager : MonoBehaviour
     public bool addExit;
     public Text progressText;
     public Text keysText;
+    public Text completedText;
 
     public GameObject extraKey;
 
@@ -27,6 +29,7 @@ public class LevelManager : MonoBehaviour
     public Transform[] buttons;
     public GameObject particleObject;
     public GameObject spawnedParticleObject;
+    public RectTransform completedButton;
 
     public SpriteLayerController sprites;
 
@@ -75,7 +78,11 @@ public class LevelManager : MonoBehaviour
         stats = GameObject.Find("Stats").GetComponent<StatsManager>();
         _sound = GetComponent<AudioSource>();
         sprites = GetComponent<SpriteLayerController>();
-        keysText.text = ": " + stats.keys;
+        if(!coop)
+        {
+            keysText.text = ": " + stats.keys;
+        }
+        
     }
 
     void Update()
@@ -121,11 +128,28 @@ public class LevelManager : MonoBehaviour
             fading = true;
             completed.SetActive(true);
             reset.SetActive(false);
-
             if (!stats.clearedLevels[currentLevel] && !coop)
             {
                 extraKey.SetActive(true);
+                completedText.text = "First Clear!";
+                completedButton.sizeDelta = new Vector2(completedButton.sizeDelta.x, 300);
+                if (!stats.unlockedLevels[currentLevel + 1])
+                {
+                    completedText.text = "First Clear! \n Unlock more levels to continue...";
+                    completedButton.sizeDelta = new Vector2(completedButton.sizeDelta.x, 500);
+                }
             }
+            else if (!stats.unlockedLevels[currentLevel + 1] && !coop)
+            {
+                completedButton.sizeDelta = new Vector2(completedButton.sizeDelta.x, 350);
+                completedText.text = "Unlock more\nlevels to\ncontinue!";
+            }
+            else if(!coop)
+            {
+                completedButton.sizeDelta = new Vector2(completedButton.sizeDelta.x, 200);
+                completedText.text = "";
+            }
+
         }
 
         //Player 1
@@ -220,6 +244,7 @@ public class LevelManager : MonoBehaviour
 
         Camera.main.GetComponent<TileManager>().tiles.Clear();
         Camera.main.GetComponent<TileManager>().tiles2.Clear();
+        UIMarbles.Clear();
         Camera.main.GetComponent<GenerateLevel>().CreateLevel(levels[currentLevel].levelTexture);
         Camera.main.GetComponent<GenerateLevel>().AddCratesAndPlayer(levels[currentLevel].levelTexture);
         Camera.main.GetComponent<GenerateLevel>().SetMarbles(levels[currentLevel]);
@@ -243,14 +268,21 @@ public class LevelManager : MonoBehaviour
             }
             extraKey.SetActive(false);
             currentLevel++;
-            if (currentLevel > 29)
+            if (!stats.unlockedLevels[currentLevel])
             {
-                currentLevel = 0;
+                completed.SetActive(false);
+                isCompleted = false;
+                progress = 0;
+                SceneManager.LoadScene(3);
             }
-            ResetLevel();
-            completed.SetActive(false);
-            isCompleted = false;
-            progress = 0;
+            else
+            {
+                ResetLevel();
+                completed.SetActive(false);
+                isCompleted = false;
+                progress = 0;
+            }
+            
         }
         else
         {

@@ -38,7 +38,7 @@ public class StatsManager : MonoBehaviour {
 
     void Start()
     {
-        /*
+        
         if(PlayerPrefsX.GetBoolArray("UnlockedLevels").Length > 1)
         {
             unlockedLevels = PlayerPrefsX.GetBoolArray("UnlockedLevels");
@@ -52,7 +52,7 @@ public class StatsManager : MonoBehaviour {
             unlockedLevelsCoop = PlayerPrefsX.GetBoolArray("UnlockedLevelsCoop");
             clearedLevelsCoop = PlayerPrefsX.GetBoolArray("ClearedLevelsCoop");
         }
-        */
+        
     }
 
 	
