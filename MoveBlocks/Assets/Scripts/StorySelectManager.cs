@@ -169,7 +169,9 @@ public class StorySelectManager : MonoBehaviour
                     for(int x = 0; x < 10; x++)
                     {
                         stats.unlockedLevels[i + x] = true;
+                        
                     }
+                    PlayerPrefsX.SetBoolArray("UnlockedLevels", stats.unlockedLevels);
                     break;
                 }
             }
