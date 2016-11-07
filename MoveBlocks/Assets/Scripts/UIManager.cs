@@ -11,6 +11,8 @@ public class UIManager : MonoBehaviour
     public GameObject settingsPanel;
     public LevelManager levelManager;
 
+    public int adCheat;
+
     public Text keysText;
 
     public Vector2 padStart1;
@@ -56,21 +58,35 @@ public class UIManager : MonoBehaviour
         controlPad2.GetComponent<RectTransform>().anchoredPosition = padStart2;
     }
 
+    public void AdCheat()
+    {
+        adCheat++;
+        if(adCheat > 4)
+        {
+            Camera.main.GetComponent<AdManager>().bannerView.Hide();
+            GameObject.Find("Stats").GetComponent<StatsManager>().disableAds = true;
+            Camera.main.GetComponent<AdManager>().adDisabled = true;
+        }
+    }
+
     public void MainMenu()
     {
+
+        Camera.main.GetComponent<AdManager>().bannerView.Hide();
+        
         levelManager._sound.PlayOneShot(levelManager.button);
         SceneManager.LoadScene(0);
     }
 
     public void StoryMenu()
     {
+        Camera.main.GetComponent<AdManager>().bannerView.Destroy();
         levelManager._sound.PlayOneShot(levelManager.button);
         SceneManager.LoadScene(3);
     }
 
     public void DragPanel(bool secondPlayer)
     {
-        Debug.Log("Dragging...");
         if(settingsPanel.activeSelf)
         {
             if(!levelManager.coop)

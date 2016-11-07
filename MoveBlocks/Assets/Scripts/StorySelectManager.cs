@@ -69,10 +69,18 @@ public class StorySelectManager : MonoBehaviour
     {
         if(doorSpeech.activeSelf)
         {
-            doorSpeech.GetComponentInChildren<Text>().text = stats.keys + "/" + keysNeeded[stats.unlockedDoors];
+            if(stats.unlockedDoors < 3)
+            {
+                doorSpeech.GetComponentInChildren<Text>().text = stats.keys + "/" + keysNeeded[stats.unlockedDoors];
+            }
+            else
+            {
+                doorSpeech.GetComponentInChildren<Text>().text = "soon";
+            }
+            
         }
         
-        totalKeys.text = ": " + stats.keys.ToString();
+        totalKeys.text = ": " + stats.keys.ToString() + "/40";
         overlay.anchoredPosition = Vector2.Lerp(overlay.anchoredPosition, new Vector2(overlay.anchoredPosition.x, overlayYDest), overlayTime * Time.deltaTime);
 
         if(inCutscene)

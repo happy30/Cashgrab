@@ -20,6 +20,8 @@ public class LevelManager : MonoBehaviour
     public Text keysText;
     public Text completedText;
 
+    public int adCheat;
+
     public GameObject extraKey;
 
     public GameObject keySprite;
@@ -230,6 +232,13 @@ public class LevelManager : MonoBehaviour
 
     public void ResetLevel()
     {
+        if(Camera.main.GetComponent<AdManager>().interstitial.IsLoaded() && !stats.disableAds && !coop)
+        {
+            Debug.Log("play ad...");
+            Camera.main.GetComponent<AdManager>().interstitial.Show();
+        }
+        
+
         marblesSpawned = false;
         marbleProgress = 0;
         progress = 0;
@@ -250,6 +259,7 @@ public class LevelManager : MonoBehaviour
         Camera.main.GetComponent<GenerateLevel>().SetMarbles(levels[currentLevel]);
         sprites.AssignPlayers();
         reset.SetActive(true);
+        Camera.main.GetComponent<AdManager>().interstitial.Destroy();
     }
 
     public void CompleteLevel()

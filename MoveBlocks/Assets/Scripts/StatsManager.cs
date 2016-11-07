@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class StatsManager : MonoBehaviour {
 
+
+    public bool disableAds;
     public int totalLevels;
     public bool[] unlockedLevels;
     public bool[] clearedLevels;
