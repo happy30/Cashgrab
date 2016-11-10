@@ -31,7 +31,7 @@ public class AdManager : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
         time += Time.deltaTime;
-        if(time > 60 && !adDisabled)
+        if(time > 240 && !adDisabled)
         {
             bannerView.Destroy();
             RequestBanner();

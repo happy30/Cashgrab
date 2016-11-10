@@ -35,6 +35,10 @@ public class MainMenu : MonoBehaviour
     public bool fading;
     public bool mainMenu;
 
+    public GameObject sureYes;
+    public GameObject sureNo;
+    public GameObject sureOk;
+
 
     public void Start()
     {
@@ -230,16 +234,23 @@ public class MainMenu : MonoBehaviour
     {
         _sound.PlayOneShot(button);
         surePanel.SetActive(true);
+        sureNo.SetActive(true);
+        sureYes.SetActive(true);
+        sureOk.SetActive(false);
     }
     public void SureYes()
     {
         surePanelText.text = "All data has been reset!";
         _sound.PlayOneShot(resetSound);
         stats.ClearData();
+        sureNo.SetActive(false);
+        sureYes.SetActive(false);
+        sureOk.SetActive(true);
     }
     public void SureNo()
     {
         _sound.PlayOneShot(button);
+        surePanelText.text = "Are you sure?";
         surePanel.SetActive(false);
     }
 

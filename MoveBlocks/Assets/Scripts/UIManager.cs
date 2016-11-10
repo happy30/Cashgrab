@@ -71,8 +71,11 @@ public class UIManager : MonoBehaviour
 
     public void MainMenu()
     {
-
-        Camera.main.GetComponent<AdManager>().bannerView.Hide();
+        if(!levelManager.coop)
+        {
+            Camera.main.GetComponent<AdManager>().bannerView.Hide();
+        }
+        
         
         levelManager._sound.PlayOneShot(levelManager.button);
         SceneManager.LoadScene(0);
