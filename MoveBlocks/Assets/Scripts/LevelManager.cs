@@ -115,11 +115,11 @@ public class LevelManager : MonoBehaviour
         }
         else if (progress == levels[currentLevel].targets && !marblesSpawned)
         {
+            addExit = true;
             Camera.main.GetComponent<GenerateLevel>().CreateSecondaryLayer(levels[currentLevel].secondaryLevelTexture);
             marblesSpawned = true;
         }
-
-        else
+        else if ((progress != levels[currentLevel].targets && !marblesSpawned))
         {
             reset.SetActive(true);
             addExit = false;
@@ -232,11 +232,15 @@ public class LevelManager : MonoBehaviour
 
     public void ResetLevel()
     {
-        if(Camera.main.GetComponent<AdManager>().interstitial.IsLoaded() && !stats.disableAds && !coop)
+        if(!coop)
         {
-            Debug.Log("play ad...");
-            Camera.main.GetComponent<AdManager>().interstitial.Show();
+            if (Camera.main.GetComponent<AdManager>().interstitial.IsLoaded() && !stats.disableAds)
+            {
+                Debug.Log("play ad...");
+                Camera.main.GetComponent<AdManager>().interstitial.Show();
+            }
         }
+        
         
 
         marblesSpawned = false;
@@ -259,7 +263,6 @@ public class LevelManager : MonoBehaviour
         Camera.main.GetComponent<GenerateLevel>().SetMarbles(levels[currentLevel]);
         sprites.AssignPlayers();
         reset.SetActive(true);
-        Camera.main.GetComponent<AdManager>().interstitial.Destroy();
     }
 
     public void CompleteLevel()
@@ -283,6 +286,7 @@ public class LevelManager : MonoBehaviour
                 completed.SetActive(false);
                 isCompleted = false;
                 progress = 0;
+                Camera.main.GetComponent<AdManager>().bannerView.Hide();
                 SceneManager.LoadScene(3);
             }
             else
