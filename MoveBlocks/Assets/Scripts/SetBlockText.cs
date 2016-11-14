@@ -12,7 +12,9 @@ public class SetBlockText : MonoBehaviour {
 	void Awake ()
     {
         stats = GameObject.Find("Stats").GetComponent<StatsManager>();
-	}
+        GetComponent<Text>().text = "LOCKED";
+        GetComponent<Text>().color = new Color(0.1f, 0.1f, 0.1f);
+    }
 	
 	// Update is called once per frame
 	void Update ()

@@ -199,6 +199,22 @@ public class PlayerController : MonoBehaviour
         {
             if(tileManager.tiles2[i].loc == pos && tileManager.tiles2[i].tileType == TileClass.TileType.Marble)
             {
+                for(int x = 0; x < tileManager.tiles.Count; x++)
+                {
+                    if(tileManager.tiles[x].loc == pos && tileManager.tiles[x].tileType == TileClass.TileType.Crate)
+                    {
+                        for (int n = 0; n < tileManager.tiles.Count; n++)
+                        {
+                            if (tileManager.tiles[n].loc == pos2 && tileManager.tiles[n].tileType == TileClass.TileType.Crate || tileManager.tiles[n].loc == pos2 && tileManager.tiles[n].tileType == TileClass.TileType.Wall)
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+
+
+                
                 if(!tileManager.tiles2[i].collected)
                 {
                     levelManager.UIMarbles[levelManager.marbleProgress].GetComponent<Image>().color = Color.white;
