@@ -20,6 +20,12 @@ public class TileClass : MonoBehaviour
     public bool onTarget;
     public bool fake;
     public bool collected;
+    public Vector3 color;
+
+    public void Start()
+    {
+        color = new Vector3(GetComponent<SpriteRenderer>().color.r, GetComponent<SpriteRenderer>().color.g, GetComponent<SpriteRenderer>().color.b);
+    }
 
     public void UpdatePos(Vector2 position)
     {

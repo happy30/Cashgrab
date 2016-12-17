@@ -33,8 +33,16 @@ public class GenerateLevel : MonoBehaviour
     public Sprite spr;
     public Sprite sprf;
 
+    public Sprite greyCrate;
+    public Sprite greyTarget;
+
+    public int colourCounter;
+    public int colourTargetCounter;
+
     void Awake()
     {
+        colourCounter = 0;
+        colourTargetCounter = 0;
         stats = GameObject.Find("Stats").GetComponent<StatsManager>();
         sprites = GameObject.Find("GameManager").GetComponent<SpriteLayerController>();
         levelManager = GameObject.Find("GameManager").GetComponent<LevelManager>();
@@ -49,6 +57,8 @@ public class GenerateLevel : MonoBehaviour
 
     public void CreateLevel (Texture2D level)
     {
+        colourCounter = 0;
+        colourTargetCounter = 0;
         spawnFemale = false;
         levelManager.isCompleted = false;
         for(int x = 0; x < 16; x++)
@@ -70,6 +80,54 @@ public class GenerateLevel : MonoBehaviour
                 else if (level.GetPixel(x, y).r == 1)
                 {
                     spawnedTile = (GameObject)Instantiate(target, new Vector3(x * 0.64f, y * 0.64f, 0), Quaternion.identity);
+                    if (levelManager.levels[levelManager.currentLevel].colouredSeed == 1)
+                    {
+                        spawnedTile.GetComponent<SpriteRenderer>().sprite = greyTarget;
+                        if (colourTargetCounter == 0)
+                        {
+                            spawnedTile.GetComponent<SpriteRenderer>().color = Color.yellow;
+                            colourTargetCounter++;
+                        }
+                        else if (colourTargetCounter == 1)
+                        {
+                            spawnedTile.GetComponent<SpriteRenderer>().color = Color.cyan;
+                            colourTargetCounter++;
+                        }
+                        else if (colourTargetCounter == 2)
+                        {
+                            spawnedTile.GetComponent<SpriteRenderer>().color = Color.red;
+                            colourTargetCounter++;
+                        }
+                        else if (colourTargetCounter == 3)
+                        {
+                            spawnedTile.GetComponent<SpriteRenderer>().color = Color.magenta;
+                            colourTargetCounter++;
+                        }
+                    }
+                    else if (levelManager.levels[levelManager.currentLevel].colouredSeed == 3)
+                    {
+                        spawnedTile.GetComponent<SpriteRenderer>().sprite = greyTarget;
+                        if (colourTargetCounter == 0)
+                        {
+                            spawnedTile.GetComponent<SpriteRenderer>().color = Color.cyan;
+                            colourTargetCounter++;
+                        }
+                        else if (colourTargetCounter == 1)
+                        {
+                            spawnedTile.GetComponent<SpriteRenderer>().color = Color.red;
+                            colourTargetCounter++;
+                        }
+                        else if (colourTargetCounter == 2)
+                        {
+                            spawnedTile.GetComponent<SpriteRenderer>().color = Color.yellow;
+                            colourTargetCounter++;
+                        }
+                        else if (colourTargetCounter == 3)
+                        {
+                            spawnedTile.GetComponent<SpriteRenderer>().color = Color.magenta;
+                            colourTargetCounter++;
+                        }
+                    }
                 }
                 else if (level.GetPixel(x, y).g > 0.3f && level.GetPixel(x, y).g < 0.7f)
                 {
@@ -126,6 +184,30 @@ public class GenerateLevel : MonoBehaviour
                 else if (level.GetPixel(x, y).b == 1 && level.GetPixel(x, y).g != 1)
                 {
                     spawnedTile = (GameObject)Instantiate(crate, new Vector3(x * 0.64f, y * 0.64f, 0), Quaternion.identity);
+                    if(levelManager.levels[levelManager.currentLevel].colouredSeed > 0)
+                    {
+                        spawnedTile.GetComponent<SpriteRenderer>().sprite = greyCrate;
+                        if (colourCounter == 0)
+                        {
+                            spawnedTile.GetComponent<SpriteRenderer>().color = Color.yellow;
+                            colourCounter++;
+                        }
+                        else if (colourCounter == 1)
+                        {
+                            spawnedTile.GetComponent<SpriteRenderer>().color = Color.cyan;
+                            colourCounter++;
+                        }
+                        else if (colourCounter == 2)
+                        {
+                            spawnedTile.GetComponent<SpriteRenderer>().color = Color.red;
+                            colourCounter++;
+                        }
+                        else if (colourCounter == 3)
+                        {
+                            spawnedTile.GetComponent<SpriteRenderer>().color = Color.magenta;
+                            colourCounter++;
+                        }
+                    }
                 }
                 else if (level.GetPixel(x, y).g == 1 && level.GetPixel(x, y).b != 1)
                 {

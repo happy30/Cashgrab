@@ -10,4 +10,6 @@ public class LevelClass
     public bool hasSecondaryMap;
     public Texture2D secondaryLevelTexture;
     public int marbles;
+
+    public int colouredSeed;
 }

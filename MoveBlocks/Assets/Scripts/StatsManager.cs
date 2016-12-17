@@ -20,6 +20,7 @@ public class StatsManager : MonoBehaviour {
     public static StatsManager Instance;
     public bool male;
     public int unlockedDoors;
+    public bool hasSavedOnce;
 
     public Vector2 playerPos;
 
@@ -41,14 +42,38 @@ public class StatsManager : MonoBehaviour {
     void Start()
     {
 
-        if (PlayerPrefsX.GetBoolArray("UnlockedLevels").Length == 100)
+        if (PlayerPrefs.HasKey("Keys"))
         {
-            unlockedLevels = PlayerPrefsX.GetBoolArray("UnlockedLevels");
-            clearedLevels = PlayerPrefsX.GetBoolArray("ClearedLevels");
-            playerPos = PlayerPrefsX.GetVector2("PlayerPos", playerPos);
-            unlockedDoors = PlayerPrefs.GetInt("UnlockedDoors");
-            keys = PlayerPrefs.GetInt("Keys");
+            if(PlayerPrefs.HasKey("UnlockedLevels"))
+            {
+                unlockedLevels = PlayerPrefsX.GetBoolArray("UnlockedLevels");
+            }
+            if(PlayerPrefs.HasKey("ClearedLevels"))
+            {
+                clearedLevels = PlayerPrefsX.GetBoolArray("ClearedLevels");
+            }
+            if(PlayerPrefs.HasKey("PlayerPos"))
+            {
+                playerPos = PlayerPrefsX.GetVector2("PlayerPos", playerPos);
+            }
+                
+            
+            
+            if(PlayerPrefs.HasKey("UnlockedDoors"))
+            {
+                unlockedDoors = PlayerPrefs.GetInt("UnlockedDoors");
+            }
+            if(PlayerPrefs.HasKey("Keys"))
+            {
+                keys = PlayerPrefs.GetInt("Keys");
+            }
+            
         } 
+        else
+        {
+            ClearData();
+        }
+        
         if(PlayerPrefsX.GetBoolArray("UnlockedLevelsCoop").Length > 1)
         {
             unlockedLevelsCoop = PlayerPrefsX.GetBoolArray("UnlockedLevelsCoop");
