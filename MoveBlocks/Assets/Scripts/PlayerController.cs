@@ -205,7 +205,8 @@ public class PlayerController : MonoBehaviour
                     {
                         for (int n = 0; n < tileManager.tiles.Count; n++)
                         {
-                            if (tileManager.tiles[n].loc == pos2 && tileManager.tiles[n].tileType == TileClass.TileType.Crate || tileManager.tiles[n].loc == pos2 && tileManager.tiles[n].tileType == TileClass.TileType.Wall)
+                            if (tileManager.tiles[n].loc == pos2 && tileManager.tiles[n].tileType == TileClass.TileType.Crate || 
+                                tileManager.tiles[n].loc == pos2 && tileManager.tiles[n].tileType == TileClass.TileType.Wall)
                             {
                                 return false;
                             }
@@ -233,18 +234,27 @@ public class PlayerController : MonoBehaviour
                 isSliding = false;
                 return false;
             }
-            if (tileManager.tiles[i].loc == pos && tileManager.tiles[i].tileType == TileClass.TileType.Stairs && tileManager.tiles[i].gameObject.activeSelf)
+            if (tileManager.tiles[i].loc == pos && tileManager.tiles[i].tileType == TileClass.TileType.Stairs && 
+                tileManager.tiles[i].gameObject.activeSelf)
             {
                 Debug.Log("completelevel");
                 levelManager.PlayerOnExit(this);
                 levelManager._sound.PlayOneShot(levelManager.completeLevel, 0.8f);
                 return true;
             }
-            if(tileManager.tiles[i].loc == pos && tileManager.tiles[i].tileType == TileClass.TileType.Crate || tileManager.tiles[i].loc == pos && tileManager.tiles[i].tileType == TileClass.TileType.Player)
+            if(tileManager.tiles[i].loc == pos && tileManager.tiles[i].tileType == TileClass.TileType.Crate || 
+                tileManager.tiles[i].loc == pos && tileManager.tiles[i].tileType == TileClass.TileType.Player)
             {
                 for(int n = 0; n < tileManager.tiles.Count; n++)
                 {
-                    if (tileManager.tiles[n].loc == pos2 && tileManager.tiles[n].tileType == TileClass.TileType.Crate || tileManager.tiles[n].loc == pos2 && tileManager.tiles[n].tileType == TileClass.TileType.Wall || tileManager.tiles[n].loc == pos && tileManager.tiles[n].tileType == TileClass.TileType.Target && levelManager.addExit || tileManager.tiles[n].loc == pos2 && tileManager.tiles[n].tileType == TileClass.TileType.Player)
+                    if (tileManager.tiles[n].loc == pos2 && tileManager.tiles[n].tileType == TileClass.TileType.Crate || 
+                        tileManager.tiles[n].loc == pos2 && tileManager.tiles[n].tileType == TileClass.TileType.Wall || 
+                        tileManager.tiles[n].loc == pos && tileManager.tiles[n].tileType == TileClass.TileType.Target 
+                        
+                        && 
+
+                        levelManager.addExit || 
+                        tileManager.tiles[n].loc == pos2 && tileManager.tiles[n].tileType == TileClass.TileType.Player)
                     {
                         Debug.Log("We cant move the crate123");
                         isSliding = false;
@@ -253,7 +263,8 @@ public class PlayerController : MonoBehaviour
                 }
                 for (int n = 0; n < tileManager.tiles.Count; n++)
                 {
-                    if (tileManager.tiles[n].loc == pos2 && tileManager.tiles[n].tileType == TileClass.TileType.Floor || tileManager.tiles[n].loc == pos2 && tileManager.tiles[n].tileType == TileClass.TileType.Ice)
+                    if (tileManager.tiles[n].loc == pos2 && tileManager.tiles[n].tileType == TileClass.TileType.Floor || 
+                        tileManager.tiles[n].loc == pos2 && tileManager.tiles[n].tileType == TileClass.TileType.Ice)
                     {
                         if(!levelManager.addExit && !tileManager.tiles[i].fake)
                         {
@@ -298,6 +309,8 @@ public class PlayerController : MonoBehaviour
                             else
                             {
                                 tileManager.tiles[i].UpdatePos(pos2);
+                                tileManager.tiles[i].onTarget = false;
+                                tileManager.tiles[i].GetComponent<SpriteRenderer>().color = new Color(tileManager.tiles[i].GetComponent<TileClass>().color.x, tileManager.tiles[i].GetComponent<TileClass>().color.y, tileManager.tiles[i].GetComponent<TileClass>().color.z);
                                 levelManager._sound.PlayOneShot(levelManager.push);
                                 return true;
                             }
@@ -343,6 +356,8 @@ public class PlayerController : MonoBehaviour
                                     }
                                     else
                                     {
+                                        tileManager.tiles[g].onTarget = false;
+                                        tileManager.tiles[g].GetComponent<SpriteRenderer>().color = new Color(tileManager.tiles[g].GetComponent<TileClass>().color.x, tileManager.tiles[g].GetComponent<TileClass>().color.y, tileManager.tiles[g].GetComponent<TileClass>().color.z);
                                         tileManager.tiles[g].UpdatePos(pos2);
                                         levelManager._sound.PlayOneShot(levelManager.push);
                                     }
