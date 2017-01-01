@@ -39,9 +39,14 @@ public class MainMenu : MonoBehaviour
     public GameObject sureNo;
     public GameObject sureOk;
 
+    public Slider BGMSlider;
+    public Slider SFXSlider;
+    public OptionsSettings options;
+
 
     public void Start()
     {
+        options = GameObject.Find("Stats").GetComponent<OptionsSettings>();
         stats = GameObject.Find("Stats").GetComponent<StatsManager>();
         _sound = GetComponent<AudioSource>();
         if(mainMenu)
@@ -65,6 +70,17 @@ public class MainMenu : MonoBehaviour
             }
         }
     }
+
+    public void ChangeSFXVolume()
+    {
+        options.SFXFactor = SFXSlider.value;
+    }
+    public void ChangeBGMVolume()
+    {
+        options.BGMFactor = BGMSlider.value;
+    }
+
+
 
     public void LevelSelect(bool coop)
     {
