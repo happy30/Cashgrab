@@ -104,6 +104,30 @@ public class GenerateLevel : MonoBehaviour
                             colourTargetCounter++;
                         }
                     }
+                    else if (levelManager.levels[levelManager.currentLevel].colouredSeed == 2)
+                    {
+                        spawnedTile.GetComponent<SpriteRenderer>().sprite = greyTarget;
+                        if (colourTargetCounter == 0)
+                        {
+                            spawnedTile.GetComponent<SpriteRenderer>().color = Color.cyan;
+                            colourTargetCounter++;
+                        }
+                        else if (colourTargetCounter == 1)
+                        {
+                            spawnedTile.GetComponent<SpriteRenderer>().color = Color.yellow;
+                            colourTargetCounter++;
+                        }
+                        else if (colourTargetCounter == 2)
+                        {
+                            spawnedTile.GetComponent<SpriteRenderer>().color = Color.magenta;
+                            colourTargetCounter++;
+                        }
+                        else if (colourTargetCounter == 3)
+                        {
+                            spawnedTile.GetComponent<SpriteRenderer>().color = Color.red;
+                            colourTargetCounter++;
+                        }
+                    }
                     else if (levelManager.levels[levelManager.currentLevel].colouredSeed == 3)
                     {
                         spawnedTile.GetComponent<SpriteRenderer>().sprite = greyTarget;
