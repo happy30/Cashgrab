@@ -20,8 +20,11 @@ public class UIManager : MonoBehaviour
 
     public GameObject[] keys;
 
+    public OptionsSettings options;
+
     void Awake()
     {
+        options = GameObject.Find("Stats").GetComponent<OptionsSettings>();
         levelManager = GameObject.Find("GameManager").GetComponent<LevelManager>();
     }
 
@@ -33,7 +36,7 @@ public class UIManager : MonoBehaviour
 
 	public void OpenPanel()
     {
-        levelManager._sound.PlayOneShot(levelManager.openMenu);
+        levelManager._sound.PlayOneShot(levelManager.openMenu, options.SFXFactor);
         settingsPanel.SetActive(true);
         for(int i = 0; i < keys.Length; i++)
         {
@@ -43,7 +46,7 @@ public class UIManager : MonoBehaviour
 
     public void ClosePanel()
     {
-        levelManager._sound.PlayOneShot(levelManager.closeMenu);
+        levelManager._sound.PlayOneShot(levelManager.closeMenu, options.SFXFactor);
         settingsPanel.SetActive(false);
         for (int i = 0; i < keys.Length; i++)
         {
@@ -53,7 +56,7 @@ public class UIManager : MonoBehaviour
 
     public void ResetDragPanel()
     {
-        levelManager._sound.PlayOneShot(levelManager.button);
+        levelManager._sound.PlayOneShot(levelManager.button, options.SFXFactor);
         controlPad.GetComponent<RectTransform>().anchoredPosition = padStart1;
         controlPad2.GetComponent<RectTransform>().anchoredPosition = padStart2;
     }
@@ -77,14 +80,14 @@ public class UIManager : MonoBehaviour
         }
         
         
-        levelManager._sound.PlayOneShot(levelManager.button);
+        levelManager._sound.PlayOneShot(levelManager.button, options.SFXFactor);
         SceneManager.LoadScene(0);
     }
 
     public void StoryMenu()
     {
         Camera.main.GetComponent<AdManager>().bannerView.Destroy();
-        levelManager._sound.PlayOneShot(levelManager.button);
+        levelManager._sound.PlayOneShot(levelManager.button, options.SFXFactor);
         SceneManager.LoadScene(3);
     }
 

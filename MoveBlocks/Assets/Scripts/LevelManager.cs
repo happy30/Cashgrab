@@ -71,11 +71,14 @@ public class LevelManager : MonoBehaviour
 
     public bool fading;
     public AudioSource fastSound;
+    public AudioSource slowSound;
+    public OptionsSettings options;
 
     public bool playerExitOpenSound;
 
     void Awake()
     {
+        options = GameObject.Find("Stats").GetComponent<OptionsSettings>();
         tileManager = Camera.main.GetComponent<TileManager>();
         stats = GameObject.Find("Stats").GetComponent<StatsManager>();
         _sound = GetComponent<AudioSource>();
@@ -84,6 +87,7 @@ public class LevelManager : MonoBehaviour
         {
             keysText.text = ": " + stats.keys;
         }
+        slowSound.volume = options.BGMFactor;
         
     }
 
@@ -101,7 +105,7 @@ public class LevelManager : MonoBehaviour
             addExit = true;
             if(!playerExitOpenSound)
             {
-                _sound.PlayOneShot(openExit, 1f);
+                _sound.PlayOneShot(openExit, options.SFXFactor);
                 playerExitOpenSound = true;
             }
             
@@ -218,7 +222,7 @@ public class LevelManager : MonoBehaviour
 
         if (fading)
         {
-            if(fastSound.volume < 0.8f)
+            if(fastSound.volume < 0.8f * options.BGMFactor)
             {
                 fastSound.volume += Time.deltaTime;
             }
@@ -240,15 +244,15 @@ public class LevelManager : MonoBehaviour
                 Camera.main.GetComponent<AdManager>().interstitial.Show();
             }
         }
-        
-        
+        playersOnExit = 0;
+
 
         marblesSpawned = false;
         marbleProgress = 0;
         progress = 0;
         fastSound.volume = 0;
         fading = false;
-        _sound.PlayOneShot(resetSound);
+        _sound.PlayOneShot(resetSound, options.SFXFactor);
         GameObject[] delete = GameObject.FindGameObjectsWithTag("Tile");
         for(int i = 0; i < delete.Length; i++)
         {

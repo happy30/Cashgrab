@@ -60,7 +60,7 @@ public class MainMenu : MonoBehaviour
     {
         if(fading)
         {
-            if(fastSound.volume < 1)
+            if(fastSound.volume < options.BGMFactor)
             {
                 fastSound.volume += Time.deltaTime;
             }
@@ -88,7 +88,7 @@ public class MainMenu : MonoBehaviour
         {
             coopSelect = false;
             fading = true;
-            _sound.PlayOneShot(button);
+            _sound.PlayOneShot(button, options.SFXFactor);
             levelSelectPanel.SetActive(true);
             for (int x = 0; x < stats.totalLevels; x++)
             {
@@ -137,7 +137,7 @@ public class MainMenu : MonoBehaviour
         {
             coopSelect = true;
             fading = true;
-            _sound.PlayOneShot(button);
+            _sound.PlayOneShot(button, options.SFXFactor);
             levelSelectPanel.SetActive(true);
             for (int x = 0; x < stats.totalLevelsCoop; x++)
             {
@@ -188,7 +188,7 @@ public class MainMenu : MonoBehaviour
     {
         fastSound.volume = 0f;
         fading = false;
-        _sound.PlayOneShot(closeMenu);
+        _sound.PlayOneShot(closeMenu, options.SFXFactor);
         for (int i = 0; i < buttons.Count; i++)
         {
             Destroy(buttons[i]);
@@ -201,7 +201,7 @@ public class MainMenu : MonoBehaviour
 
     void ButtonClicked(int lv)
     {
-        _sound.PlayOneShot(button);
+        _sound.PlayOneShot(button, options.SFXFactor);
         stats.levelToLoad = lv;
         if(!coopSelect)
         {
@@ -217,7 +217,7 @@ public class MainMenu : MonoBehaviour
     {
         if(isMale != stats.male)
         {
-            _sound.PlayOneShot(button);
+            _sound.PlayOneShot(button, options.SFXFactor);
         }
         stats.male = isMale;
         if (stats.male == true)
@@ -234,21 +234,23 @@ public class MainMenu : MonoBehaviour
 
     public void OpenSettings()
     {
-        _sound.PlayOneShot(button);
+        _sound.PlayOneShot(button, options.SFXFactor);
         settingsPanel.SetActive(true);
+        SFXSlider.value = options.SFXFactor;
+        BGMSlider.value = options.BGMFactor;
     }
 
     public void CloseSettings()
     {
         surePanelText.text = "Are you sure?";
-        _sound.PlayOneShot(closeMenu);
+        _sound.PlayOneShot(closeMenu, options.SFXFactor);
         settingsPanel.SetActive(false);
         surePanel.SetActive(false);
     }
 
     public void ClearData()
     {
-        _sound.PlayOneShot(button);
+        _sound.PlayOneShot(button, options.SFXFactor);
         surePanel.SetActive(true);
         sureNo.SetActive(true);
         sureYes.SetActive(true);
@@ -257,7 +259,7 @@ public class MainMenu : MonoBehaviour
     public void SureYes()
     {
         surePanelText.text = "All data has been reset!";
-        _sound.PlayOneShot(resetSound);
+        _sound.PlayOneShot(resetSound, options.SFXFactor);
         stats.ClearData();
         sureNo.SetActive(false);
         sureYes.SetActive(false);
@@ -265,20 +267,20 @@ public class MainMenu : MonoBehaviour
     }
     public void SureNo()
     {
-        _sound.PlayOneShot(button);
+        _sound.PlayOneShot(button, options.SFXFactor);
         surePanelText.text = "Are you sure?";
         surePanel.SetActive(false);
     }
 
     public void ToMainMenu()
     {
-        _sound.PlayOneShot(button);
+        _sound.PlayOneShot(button, options.SFXFactor);
         SceneManager.LoadScene(0);
     }
 
     public void ToStorySelect()
     {
-        _sound.PlayOneShot(button);
+        _sound.PlayOneShot(button, options.SFXFactor);
         SceneManager.LoadScene(3);
     }
 }

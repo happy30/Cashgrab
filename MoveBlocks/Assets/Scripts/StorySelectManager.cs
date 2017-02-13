@@ -41,13 +41,16 @@ public class StorySelectManager : MonoBehaviour
     public AudioSource bgmsound;
 
     AudioSource _sound;
+    public OptionsSettings options;
 
     void Awake()
     {
+        options = GameObject.Find("Stats").GetComponent<OptionsSettings>();
         stats = GameObject.Find("Stats").GetComponent<StatsManager>();
         overlayYDest = -360 - (stats.unlockedDoors * 280);
         overlay.anchoredPosition = new Vector2(overlay.anchoredPosition.x, overlayYDest);
         bgmsound.clip = bgm;
+        bgmsound.volume = options.BGMFactor;
         _sound = GetComponent<AudioSource>();
 
         if (stats.unlockedDoors % 2 == 1)
@@ -80,7 +83,7 @@ public class StorySelectManager : MonoBehaviour
             
         }
         
-        totalKeys.text = ": " + stats.keys.ToString() + "/40";
+        totalKeys.text = ": " + stats.keys.ToString() + "/50";
         overlay.anchoredPosition = Vector2.Lerp(overlay.anchoredPosition, new Vector2(overlay.anchoredPosition.x, overlayYDest), overlayTime * Time.deltaTime);
 
         if(inCutscene)
@@ -153,7 +156,7 @@ public class StorySelectManager : MonoBehaviour
     {
         if(stats.keys >= keysNeeded[stats.unlockedDoors] && !inCutscene)
         {
-            _sound.PlayOneShot(unlock);
+            _sound.PlayOneShot(unlock, options.SFXFactor);
             Destroy(lockedDoors[stats.unlockedDoors]);
             stats.unlockedDoors++;
             overlayYDest -= 280;
@@ -186,7 +189,7 @@ public class StorySelectManager : MonoBehaviour
         }
         else
         {
-            _sound.PlayOneShot(block);
+            _sound.PlayOneShot(block, options.SFXFactor);
         }
     }
 
@@ -194,7 +197,7 @@ public class StorySelectManager : MonoBehaviour
     {
         sweetPanel.SetActive(false);
         inCutscene = false;
-        _sound.PlayOneShot(button);
+        _sound.PlayOneShot(button, options.SFXFactor);
         if (bgmsound.clip != bgm)
         {
             bgmsound.clip = bgm;

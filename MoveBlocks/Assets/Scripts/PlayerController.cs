@@ -23,12 +23,14 @@ public class PlayerController : MonoBehaviour
     public bool canMove;
     public bool isSliding;
     public bool completedCoop;
+    public OptionsSettings options;
 
     void Awake()
     {
         levelManager = GameObject.Find("GameManager").GetComponent<LevelManager>();
         tileManager = Camera.main.GetComponent<TileManager>();
         dest = transform.position;
+        options = GameObject.Find("Stats").GetComponent<OptionsSettings>();
     }
 
     void Update()
@@ -107,7 +109,7 @@ public class PlayerController : MonoBehaviour
             else
             if (!levelManager._sound.isPlaying)
             {
-                levelManager._sound.PlayOneShot(levelManager.blocked);
+                levelManager._sound.PlayOneShot(levelManager.blocked, options.SFXFactor);
             }
         }
         
@@ -130,7 +132,7 @@ public class PlayerController : MonoBehaviour
             {
                 if(!levelManager._sound.isPlaying)
                 {
-                    levelManager._sound.PlayOneShot(levelManager.blocked);
+                    levelManager._sound.PlayOneShot(levelManager.blocked, options.SFXFactor);
                 }
             }
         }
@@ -153,7 +155,7 @@ public class PlayerController : MonoBehaviour
             else
             if (!levelManager._sound.isPlaying)
             {
-                levelManager._sound.PlayOneShot(levelManager.blocked);
+                levelManager._sound.PlayOneShot(levelManager.blocked, options.SFXFactor);
             }
         }
     }
@@ -175,7 +177,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (!levelManager._sound.isPlaying)
                 {
-                    levelManager._sound.PlayOneShot(levelManager.blocked);
+                    levelManager._sound.PlayOneShot(levelManager.blocked, options.SFXFactor);
                 }
             }
         }
@@ -220,7 +222,7 @@ public class PlayerController : MonoBehaviour
                 {
                     levelManager.UIMarbles[levelManager.marbleProgress].GetComponent<Image>().color = Color.white;
                     levelManager.marbleProgress++;
-                    levelManager._sound.PlayOneShot(levelManager.onTarget, 1f);
+                    levelManager._sound.PlayOneShot(levelManager.onTarget, options.SFXFactor);
                     tileManager.tiles2[i].Collect();
                 }
             }
@@ -239,7 +241,7 @@ public class PlayerController : MonoBehaviour
             {
                 Debug.Log("completelevel");
                 levelManager.PlayerOnExit(this);
-                levelManager._sound.PlayOneShot(levelManager.completeLevel, 0.8f);
+                levelManager._sound.PlayOneShot(levelManager.completeLevel, 0.8f * options.SFXFactor);
                 return true;
             }
             if(tileManager.tiles[i].loc == pos && tileManager.tiles[i].tileType == TileClass.TileType.Crate || 
@@ -268,7 +270,7 @@ public class PlayerController : MonoBehaviour
                     {
                         if(!levelManager.addExit && !tileManager.tiles[i].fake)
                         {
-                            levelManager._sound.PlayOneShot(levelManager.push);
+                            levelManager._sound.PlayOneShot(levelManager.push, options.SFXFactor);
                             Debug.Log("We moved a crate");
                             tileManager.tiles[i].UpdatePos(pos2);
                             tileManager.tiles[i].onTarget = false;
@@ -278,7 +280,7 @@ public class PlayerController : MonoBehaviour
                         }
                         if(tileManager.tiles[i].fake)
                         {
-                            levelManager._sound.PlayOneShot(levelManager.push);
+                            levelManager._sound.PlayOneShot(levelManager.push, options.SFXFactor);
                             Debug.Log("We moved a crate");
                             tileManager.tiles[i].UpdatePos(pos2);
                             tileManager.tiles[i].onTarget = false;
@@ -299,7 +301,7 @@ public class PlayerController : MonoBehaviour
                         {
                             if(tileManager.tiles[i].GetComponent<TileClass>().color == tileManager.tiles[n].GetComponent<TileClass>().color)
                             {
-                                levelManager._sound.PlayOneShot(levelManager.onTarget, 1f);
+                                levelManager._sound.PlayOneShot(levelManager.onTarget, options.SFXFactor);
                                 tileManager.tiles[i].onTarget = true;
                                 tileManager.tiles[i].GetComponent<SpriteRenderer>().color = Color.blue;
                                 tileManager.tiles[i].UpdatePos(pos2);
@@ -311,7 +313,7 @@ public class PlayerController : MonoBehaviour
                                 tileManager.tiles[i].UpdatePos(pos2);
                                 tileManager.tiles[i].onTarget = false;
                                 tileManager.tiles[i].GetComponent<SpriteRenderer>().color = new Color(tileManager.tiles[i].GetComponent<TileClass>().color.x, tileManager.tiles[i].GetComponent<TileClass>().color.y, tileManager.tiles[i].GetComponent<TileClass>().color.z);
-                                levelManager._sound.PlayOneShot(levelManager.push);
+                                levelManager._sound.PlayOneShot(levelManager.push, options.SFXFactor);
                                 return true;
                             }
                             
@@ -319,7 +321,7 @@ public class PlayerController : MonoBehaviour
                         else if(tileManager.tiles[i].fake)
                         {
                             tileManager.tiles[i].UpdatePos(pos2);
-                            levelManager._sound.PlayOneShot(levelManager.push);
+                            levelManager._sound.PlayOneShot(levelManager.push, options.SFXFactor);
                             return true;
                         }
                     }
@@ -336,7 +338,7 @@ public class PlayerController : MonoBehaviour
                             if(tileManager.tiles[h].loc == pos2 && tileManager.tiles[h].tileType == TileClass.TileType.Wall || tileManager.tiles[h].loc == pos2 && tileManager.tiles[h].tileType == TileClass.TileType.Crate || tileManager.tiles[h].loc == pos2 && tileManager.tiles[h].tileType == TileClass.TileType.Player)
                             {
                                 Debug.Log("cant move");
-                                levelManager._sound.PlayOneShot(levelManager.blocked);
+                                levelManager._sound.PlayOneShot(levelManager.blocked, options.SFXFactor);
                                 isSliding = false;
                                 return false;
                             }
@@ -352,14 +354,14 @@ public class PlayerController : MonoBehaviour
                                         tileManager.tiles[g].onTarget = true;
                                         tileManager.tiles[g].GetComponent<SpriteRenderer>().color = Color.blue;
                                         tileManager.tiles[g].UpdatePos(pos2);
-                                        levelManager._sound.PlayOneShot(levelManager.onTarget);
+                                        levelManager._sound.PlayOneShot(levelManager.onTarget, options.SFXFactor);
                                     }
                                     else
                                     {
                                         tileManager.tiles[g].onTarget = false;
                                         tileManager.tiles[g].GetComponent<SpriteRenderer>().color = new Color(tileManager.tiles[g].GetComponent<TileClass>().color.x, tileManager.tiles[g].GetComponent<TileClass>().color.y, tileManager.tiles[g].GetComponent<TileClass>().color.z);
                                         tileManager.tiles[g].UpdatePos(pos2);
-                                        levelManager._sound.PlayOneShot(levelManager.push);
+                                        levelManager._sound.PlayOneShot(levelManager.push, options.SFXFactor);
                                     }
                                 }
                                 Debug.Log("We moved a crate ON A TARGET2");
@@ -367,13 +369,13 @@ public class PlayerController : MonoBehaviour
                                 if (tileManager.tiles[g].fake)
                                 {
                                     tileManager.tiles[g].UpdatePos(pos2);
-                                    levelManager._sound.PlayOneShot(levelManager.push);
+                                    levelManager._sound.PlayOneShot(levelManager.push, options.SFXFactor);
                                 }
                                 CheckProgress();
                                 return true;
                             }
                         }
-                        levelManager._sound.PlayOneShot(levelManager.push);
+                        levelManager._sound.PlayOneShot(levelManager.push, options.SFXFactor);
                         Debug.Log("move crate on ice");
                         tileManager.tiles[g].UpdatePos(pos2);
                         tileManager.tiles[g].onTarget = false;
@@ -383,7 +385,7 @@ public class PlayerController : MonoBehaviour
                 }
                 Debug.Log("Sliding!");
                 isSliding = true;
-                levelManager._sound.PlayOneShot(levelManager.move, 0.5f);
+                levelManager._sound.PlayOneShot(levelManager.move, 0.5f * options.SFXFactor);
                 return true;
             }
             if (tileManager.tiles[i].loc == pos && tileManager.tiles[i].tileType == TileClass.TileType.Floor && isSliding || tileManager.tiles[i].loc == pos && tileManager.tiles[i].tileType == TileClass.TileType.Target && isSliding)
@@ -403,12 +405,12 @@ public class PlayerController : MonoBehaviour
                                         if(tileManager.tiles[p].loc == pos2 && tileManager.tiles[p].tileType == TileClass.TileType.Crate || tileManager.tiles[p].loc == pos2 && tileManager.tiles[p].tileType == TileClass.TileType.Player)
                                         {
                                             Debug.Log("cant move");
-                                            levelManager._sound.PlayOneShot(levelManager.blocked);
+                                            levelManager._sound.PlayOneShot(levelManager.blocked, options.SFXFactor);
                                             isSliding = false;
                                             return false;
                                         }
                                     }
-                                    levelManager._sound.PlayOneShot(levelManager.push);
+                                    levelManager._sound.PlayOneShot(levelManager.push, options.SFXFactor);
                                     Debug.Log("We moved a crate ON A TARGET ripkip2");
                                     tileManager.tiles[k].UpdatePos(pos2);
 
@@ -421,7 +423,7 @@ public class PlayerController : MonoBehaviour
                                         {
                                             if(tileManager.tiles[k].GetComponent<TileClass>().color == tileManager.tiles[d].GetComponent<TileClass>().color)
                                             {
-                                                levelManager._sound.PlayOneShot(levelManager.onTarget);
+                                                levelManager._sound.PlayOneShot(levelManager.onTarget, options.SFXFactor);
                                                 Debug.Log("blue ice");
                                                 tileManager.tiles[k].onTarget = true;
                                                 tileManager.tiles[k].GetComponent<SpriteRenderer>().color = Color.blue;
@@ -436,12 +438,12 @@ public class PlayerController : MonoBehaviour
                                                     if (tileManager.tiles[p].loc == pos2 && tileManager.tiles[p].tileType == TileClass.TileType.Crate || tileManager.tiles[p].loc == pos2 && tileManager.tiles[p].tileType == TileClass.TileType.Player)
                                                     {
                                                         Debug.Log("cant move");
-                                                        levelManager._sound.PlayOneShot(levelManager.blocked);
+                                                        levelManager._sound.PlayOneShot(levelManager.blocked, options.SFXFactor);
                                                         isSliding = false;
                                                         return false;
                                                     }
                                                 }
-                                                levelManager._sound.PlayOneShot(levelManager.push);
+                                                levelManager._sound.PlayOneShot(levelManager.push, options.SFXFactor);
                                                 Debug.Log("We moved a crate ON A TARGET ripkip");
                                                 tileManager.tiles[k].UpdatePos(pos2);
                                                 for (int q = 0; q < tileManager.tiles.Count; q++)
@@ -471,12 +473,12 @@ public class PlayerController : MonoBehaviour
                                         if (tileManager.tiles[p].loc == pos2 && tileManager.tiles[p].tileType == TileClass.TileType.Crate || tileManager.tiles[p].loc == pos2 && tileManager.tiles[p].tileType == TileClass.TileType.Player)
                                         {
                                             Debug.Log("cant move");
-                                            levelManager._sound.PlayOneShot(levelManager.blocked);
+                                            levelManager._sound.PlayOneShot(levelManager.blocked, options.SFXFactor);
                                             isSliding = false;
                                             return false;
                                         }
                                     }
-                                    levelManager._sound.PlayOneShot(levelManager.push);
+                                    levelManager._sound.PlayOneShot(levelManager.push, options.SFXFactor);
                                     Debug.Log("We moved a crate ON A TARGET ripkip");
                                     tileManager.tiles[k].UpdatePos(pos2);
                                     for (int d = 0; d < tileManager.tiles.Count; d++)
@@ -510,7 +512,7 @@ public class PlayerController : MonoBehaviour
                                             if (levelManager.addExit)
                                             {
                                                 Debug.Log("Cant move after level finished");
-                                                levelManager._sound.PlayOneShot(levelManager.blocked);
+                                                levelManager._sound.PlayOneShot(levelManager.blocked, options.SFXFactor);
                                                 return false;
                                             }
                                         }
@@ -525,7 +527,7 @@ public class PlayerController : MonoBehaviour
                                             if (levelManager.addExit)
                                             {
                                                 Debug.Log("Cant move after level finished");
-                                                levelManager._sound.PlayOneShot(levelManager.blocked);
+                                                levelManager._sound.PlayOneShot(levelManager.blocked, options.SFXFactor);
                                                 return false;
                                             }
                                         }
@@ -533,14 +535,14 @@ public class PlayerController : MonoBehaviour
                                 }
                             }
                         }
-                        levelManager._sound.PlayOneShot(levelManager.move);
+                        levelManager._sound.PlayOneShot(levelManager.move, options.SFXFactor);
                         return true;
                     }
                 }
                 isSliding = false;
             }
         }
-        levelManager._sound.PlayOneShot(levelManager.move);
+        levelManager._sound.PlayOneShot(levelManager.move, options.SFXFactor);
         return true;
     }
 }
