@@ -13,6 +13,7 @@ public class LevelManager : MonoBehaviour
 
     public GameObject completed;
     public GameObject reset;
+    public GameObject undo;
 
     public bool isCompleted;
     public bool addExit;
@@ -95,6 +96,12 @@ public class LevelManager : MonoBehaviour
     {
         int block = (currentLevel / 10) + 1;
         int level = currentLevel - ((block - 1) * 10) + 1;
+
+
+        if(addExit)
+        {
+            undo.SetActive(false);
+        }
 
         progressText.text = (block + "." + level);
         if(progress >= levels[currentLevel].targets && marbleProgress == levels[currentLevel].marbles)
@@ -267,6 +274,8 @@ public class LevelManager : MonoBehaviour
         Camera.main.GetComponent<GenerateLevel>().SetMarbles(levels[currentLevel]);
         sprites.AssignPlayers();
         reset.SetActive(true);
+        addExit = false;
+        undo.SetActive(false);
     }
 
     public void CompleteLevel()

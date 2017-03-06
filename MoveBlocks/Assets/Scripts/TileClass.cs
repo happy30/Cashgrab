@@ -22,9 +22,12 @@ public class TileClass : MonoBehaviour
     public bool collected;
     public Vector3 color;
 
+    public LevelManager levelManager;
+
     public void Start()
     {
         color = new Vector3(GetComponent<SpriteRenderer>().color.r, GetComponent<SpriteRenderer>().color.g, GetComponent<SpriteRenderer>().color.b);
+        levelManager = GameObject.Find("GameManager").GetComponent<LevelManager>();
     }
 
     public void UpdatePos(Vector2 position)
@@ -41,7 +44,7 @@ public class TileClass : MonoBehaviour
                 for (int i = 0; i < tileManager.tiles.Count; i++)
                 {
 
-                    if (tileManager.tiles[i].loc == loc && tileManager.tiles[i].tileType == TileType.Stairs)
+                    if (tileManager.tiles[i].loc == loc && tileManager.tiles[i].tileType == TileType.Stairs && levelManager.isCompleted)
                     {
                         LevelManager levelManager = GameObject.Find("GameManager").GetComponent<LevelManager>();
                         levelManager.PlayerOnExit(GetComponent<PlayerController>());
@@ -59,8 +62,43 @@ public class TileClass : MonoBehaviour
         }
     }
 
+    public void CheckOnTarget()
+    {
+        TileManager tileManager = Camera.main.GetComponent<TileManager>();
+        if (tileType == TileType.Crate && !fake)
+        {
+            for(int i = 0; i < tileManager.tiles.Count; i++)
+            {
+                if(tileManager.tiles[i].loc == loc && tileManager.tiles[i].tileType == TileType.Floor || tileManager.tiles[i].loc == loc && tileManager.tiles[i].tileType == TileType.Ice)
+                {
+                    onTarget = false;
+                    GetComponent<SpriteRenderer>().color = new Color(color.x, color.y, color.z);
+                }
+            }
+
+            for (int i = 0; i < tileManager.tiles.Count; i++)
+            {
+                if (tileManager.tiles[i].loc == loc && tileManager.tiles[i].tileType == TileType.Target)
+                {
+                    if(tileManager.tiles[i].color == color)
+                    {
+                        onTarget = true;
+                        GetComponent<SpriteRenderer>().color = Color.blue;
+                    }
+                    else
+                    {
+                        onTarget = false;
+                        GetComponent<SpriteRenderer>().color = new Color(color.x, color.y, color.z);
+                    }
+                    
+                }
+            }
+        }
+    }
+
     public void Collect()
     {
+        
         GetComponent<SpriteRenderer>().sprite = null;
         collected = true;
     }

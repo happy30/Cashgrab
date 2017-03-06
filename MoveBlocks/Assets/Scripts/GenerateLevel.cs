@@ -103,6 +103,11 @@ public class GenerateLevel : MonoBehaviour
                             spawnedTile.GetComponent<SpriteRenderer>().color = Color.magenta;
                             colourTargetCounter++;
                         }
+                        else if (colourTargetCounter == 4)
+                        {
+                            spawnedTile.GetComponent<SpriteRenderer>().color = Color.magenta;
+                            colourTargetCounter++;
+                        }
                     }
                     else if (levelManager.levels[levelManager.currentLevel].colouredSeed == 2)
                     {
@@ -151,6 +156,11 @@ public class GenerateLevel : MonoBehaviour
                             spawnedTile.GetComponent<SpriteRenderer>().color = Color.magenta;
                             colourTargetCounter++;
                         }
+                        else if (colourTargetCounter == 4)
+                        {
+                            spawnedTile.GetComponent<SpriteRenderer>().color = Color.magenta;
+                            colourTargetCounter++;
+                        }
                     }
                     else if (levelManager.levels[levelManager.currentLevel].colouredSeed == 4)
                     {
@@ -171,6 +181,35 @@ public class GenerateLevel : MonoBehaviour
                             colourTargetCounter++;
                         }
                         else if (colourTargetCounter == 3)
+                        {
+                            spawnedTile.GetComponent<SpriteRenderer>().color = Color.magenta;
+                            colourTargetCounter++;
+                        }
+                    }
+                    else if (levelManager.levels[levelManager.currentLevel].colouredSeed == 5)
+                    {
+                        spawnedTile.GetComponent<SpriteRenderer>().sprite = greyTarget;
+                        if (colourTargetCounter == 0)
+                        {
+                            spawnedTile.GetComponent<SpriteRenderer>().color = Color.red;
+                            colourTargetCounter++;
+                        }
+                        else if (colourTargetCounter == 1)
+                        {
+                            spawnedTile.GetComponent<SpriteRenderer>().color = Color.cyan;
+                            colourTargetCounter++;
+                        }
+                        else if (colourTargetCounter == 2)
+                        {
+                            spawnedTile.GetComponent<SpriteRenderer>().color = Color.yellow;
+                            colourTargetCounter++;
+                        }
+                        else if (colourTargetCounter == 3)
+                        {
+                            spawnedTile.GetComponent<SpriteRenderer>().color = Color.magenta;
+                            colourTargetCounter++;
+                        }
+                        else if (colourTargetCounter == 4)
                         {
                             spawnedTile.GetComponent<SpriteRenderer>().color = Color.magenta;
                             colourTargetCounter++;
@@ -251,6 +290,11 @@ public class GenerateLevel : MonoBehaviour
                             colourCounter++;
                         }
                         else if (colourCounter == 3)
+                        {
+                            spawnedTile.GetComponent<SpriteRenderer>().color = Color.magenta;
+                            colourCounter++;
+                        }
+                        else if (colourCounter == 4)
                         {
                             spawnedTile.GetComponent<SpriteRenderer>().color = Color.magenta;
                             colourCounter++;

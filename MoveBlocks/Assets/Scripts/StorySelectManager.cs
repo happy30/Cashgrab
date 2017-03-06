@@ -72,7 +72,7 @@ public class StorySelectManager : MonoBehaviour
     {
         if(doorSpeech.activeSelf)
         {
-            if(stats.unlockedDoors < 3)
+            if(stats.unlockedDoors < 4)
             {
                 doorSpeech.GetComponentInChildren<Text>().text = stats.keys + "/" + keysNeeded[stats.unlockedDoors];
             }

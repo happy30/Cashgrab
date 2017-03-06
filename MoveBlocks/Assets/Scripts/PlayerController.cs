@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     public TileManager tileManager;
     public LevelManager levelManager;
+    public List<Vector2> undoPos = new List<Vector2>();
 
     public enum Gender
     {
@@ -27,7 +28,9 @@ public class PlayerController : MonoBehaviour
 
     void Awake()
     {
+        
         levelManager = GameObject.Find("GameManager").GetComponent<LevelManager>();
+        levelManager.undo.SetActive(false);
         tileManager = Camera.main.GetComponent<TileManager>();
         dest = transform.position;
         options = GameObject.Find("Stats").GetComponent<OptionsSettings>();
@@ -92,8 +95,39 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public void SavePoses()
+    {
+        levelManager.undo.SetActive(true);
+        undoPos.Clear();
+            for (int i = 0; i < tileManager.tiles.Count; i++)
+            {
+                undoPos.Add(tileManager.tiles[i].loc);
+            }
+
+    }
+
+    public void Undo()
+    {
+        levelManager._sound.PlayOneShot(levelManager.move, options.SFXFactor);
+        levelManager.undo.SetActive(false);
+        if(!levelManager.addExit)
+        {
+            for (int i = 0; i < tileManager.tiles.Count; i++)
+            {
+                tileManager.tiles[i].loc = undoPos[i];
+                tileManager.tiles[i].UpdatePos(tileManager.tiles[i].loc);
+                tileManager.tiles[i].CheckOnTarget();
+            }
+        }
+        isSliding = false;
+    }
+
     public void MoveRight()
     {
+        if(!isSliding)
+        {
+            SavePoses();
+        }
         CheckProgress();
         if (!levelManager.isCompleted && canMove)
         {
@@ -105,6 +139,7 @@ public class PlayerController : MonoBehaviour
                 dest = new Vector2(transform.position.x + 1 * 0.64f, transform.position.y);
                 canMove = false;
                 GetComponent<TileClass>().loc = new Vector2(Mathf.Round(dest.x * 100) / 100, Mathf.Round(dest.y * 100) / 100);
+
             }
             else
             if (!levelManager._sound.isPlaying)
@@ -117,6 +152,10 @@ public class PlayerController : MonoBehaviour
 
     public void MoveLeft()
     {
+        if (!isSliding)
+        {
+            SavePoses();
+        }
         CheckProgress();
         if (!levelManager.isCompleted && canMove)
         {
@@ -127,6 +166,7 @@ public class PlayerController : MonoBehaviour
                 dest = new Vector2(transform.position.x - 1 * 0.64f, transform.position.y);
                 canMove = false;
                 GetComponent<TileClass>().loc = new Vector2(Mathf.Round(dest.x * 100) / 100, Mathf.Round(dest.y * 100) / 100);
+
             }
             else
             {
@@ -141,6 +181,10 @@ public class PlayerController : MonoBehaviour
 
     public void MoveUp()
     {
+        if (!isSliding)
+        {
+            SavePoses();
+        }
         CheckProgress();
         if (!levelManager.isCompleted && canMove)
         {
@@ -151,6 +195,7 @@ public class PlayerController : MonoBehaviour
                 dest = new Vector2(transform.position.x, transform.position.y + 1 * 0.64f);
                 canMove = false;
                 GetComponent<TileClass>().loc = new Vector2(Mathf.Round(dest.x * 100) / 100, Mathf.Round(dest.y * 100) / 100);
+
             }
             else
             if (!levelManager._sound.isPlaying)
@@ -162,6 +207,10 @@ public class PlayerController : MonoBehaviour
 
     public void MoveDown()
     {
+        if (!isSliding)
+        {
+            SavePoses();
+        }
         CheckProgress();
         if (!levelManager.isCompleted && canMove)
         {
@@ -172,6 +221,7 @@ public class PlayerController : MonoBehaviour
                 dest = new Vector2(transform.position.x, transform.position.y - 1 * 0.64f);
                 canMove = false;
                 GetComponent<TileClass>().loc = new Vector2(Mathf.Round(dest.x * 100) / 100, Mathf.Round(dest.y * 100) / 100);
+
             }
             else
             {
@@ -272,6 +322,7 @@ public class PlayerController : MonoBehaviour
                         {
                             levelManager._sound.PlayOneShot(levelManager.push, options.SFXFactor);
                             Debug.Log("We moved a crate");
+                            
                             tileManager.tiles[i].UpdatePos(pos2);
                             tileManager.tiles[i].onTarget = false;
                             tileManager.tiles[i].GetComponent<SpriteRenderer>().color = new Color(tileManager.tiles[i].GetComponent<TileClass>().color.x, tileManager.tiles[i].GetComponent<TileClass>().color.y, tileManager.tiles[i].GetComponent<TileClass>().color.z) ;
@@ -282,6 +333,7 @@ public class PlayerController : MonoBehaviour
                         {
                             levelManager._sound.PlayOneShot(levelManager.push, options.SFXFactor);
                             Debug.Log("We moved a crate");
+                            
                             tileManager.tiles[i].UpdatePos(pos2);
                             tileManager.tiles[i].onTarget = false;
                             tileManager.tiles[i].GetComponent<SpriteRenderer>().color = new Color(tileManager.tiles[i].GetComponent<TileClass>().color.x, tileManager.tiles[i].GetComponent<TileClass>().color.y, tileManager.tiles[i].GetComponent<TileClass>().color.z);
@@ -301,6 +353,7 @@ public class PlayerController : MonoBehaviour
                         {
                             if(tileManager.tiles[i].GetComponent<TileClass>().color == tileManager.tiles[n].GetComponent<TileClass>().color)
                             {
+                                
                                 levelManager._sound.PlayOneShot(levelManager.onTarget, options.SFXFactor);
                                 tileManager.tiles[i].onTarget = true;
                                 tileManager.tiles[i].GetComponent<SpriteRenderer>().color = Color.blue;
@@ -310,6 +363,7 @@ public class PlayerController : MonoBehaviour
                             }
                             else
                             {
+                                
                                 tileManager.tiles[i].UpdatePos(pos2);
                                 tileManager.tiles[i].onTarget = false;
                                 tileManager.tiles[i].GetComponent<SpriteRenderer>().color = new Color(tileManager.tiles[i].GetComponent<TileClass>().color.x, tileManager.tiles[i].GetComponent<TileClass>().color.y, tileManager.tiles[i].GetComponent<TileClass>().color.z);
@@ -320,6 +374,7 @@ public class PlayerController : MonoBehaviour
                         }
                         else if(tileManager.tiles[i].fake)
                         {
+                            
                             tileManager.tiles[i].UpdatePos(pos2);
                             levelManager._sound.PlayOneShot(levelManager.push, options.SFXFactor);
                             return true;
@@ -365,9 +420,10 @@ public class PlayerController : MonoBehaviour
                                     }
                                 }
                                 Debug.Log("We moved a crate ON A TARGET2");
-
+                                
                                 if (tileManager.tiles[g].fake)
                                 {
+                                    
                                     tileManager.tiles[g].UpdatePos(pos2);
                                     levelManager._sound.PlayOneShot(levelManager.push, options.SFXFactor);
                                 }
@@ -377,6 +433,7 @@ public class PlayerController : MonoBehaviour
                         }
                         levelManager._sound.PlayOneShot(levelManager.push, options.SFXFactor);
                         Debug.Log("move crate on ice");
+                        
                         tileManager.tiles[g].UpdatePos(pos2);
                         tileManager.tiles[g].onTarget = false;
                         tileManager.tiles[g].GetComponent<SpriteRenderer>().color = new Color(tileManager.tiles[g].GetComponent<TileClass>().color.x, tileManager.tiles[g].GetComponent<TileClass>().color.y, tileManager.tiles[g].GetComponent<TileClass>().color.z);
@@ -450,6 +507,7 @@ public class PlayerController : MonoBehaviour
                                                 {
                                                     if (tileManager.tiles[q].loc == pos2 && tileManager.tiles[q].tileType == TileClass.TileType.Target)
                                                     {
+                                                        
                                                         Debug.Log("blue ice");
                                                         //tileManager.tiles[k].onTarget = true;
                                                         //tileManager.tiles[k].GetComponent<SpriteRenderer>().color = Color.blue;
@@ -485,6 +543,7 @@ public class PlayerController : MonoBehaviour
                                     {
                                         if (tileManager.tiles[d].loc == pos2 && tileManager.tiles[d].tileType == TileClass.TileType.Target)
                                         {
+                                            
                                             Debug.Log("blue ice");
                                             //tileManager.tiles[k].onTarget = true;
                                             //tileManager.tiles[k].GetComponent<SpriteRenderer>().color = Color.blue;
@@ -535,6 +594,7 @@ public class PlayerController : MonoBehaviour
                                 }
                             }
                         }
+                        
                         levelManager._sound.PlayOneShot(levelManager.move, options.SFXFactor);
                         return true;
                     }
@@ -542,6 +602,7 @@ public class PlayerController : MonoBehaviour
                 isSliding = false;
             }
         }
+        
         levelManager._sound.PlayOneShot(levelManager.move, options.SFXFactor);
         return true;
     }
